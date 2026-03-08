@@ -13,6 +13,7 @@ import Certifications from '@/components/Certifications';
 import Contact from '@/components/Contact';
 import LoadingScreen from '@/components/LoadingScreen';
 import { useVisitorTracking } from '@/hooks/useVisitorTracking';
+import EmailCollectionModal from '@/components/EmailCollectionModal';
 
 const Hero = React.lazy(() => import('@/components/Hero'));
 
