@@ -1,0 +1,1 @@
+ALTER TABLE public.site_visits ADD COLUMN referrer text, ADD COLUMN screen_resolution text;

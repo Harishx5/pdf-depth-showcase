@@ -19,6 +19,8 @@ export type Database = {
           created_at: string
           id: string
           page_url: string
+          referrer: string | null
+          screen_resolution: string | null
           section_viewed: string | null
           session_id: string
           user_agent: string | null
@@ -28,6 +30,8 @@ export type Database = {
           created_at?: string
           id?: string
           page_url: string
+          referrer?: string | null
+          screen_resolution?: string | null
           section_viewed?: string | null
           session_id: string
           user_agent?: string | null
@@ -37,6 +41,8 @@ export type Database = {
           created_at?: string
           id?: string
           page_url?: string
+          referrer?: string | null
+          screen_resolution?: string | null
           section_viewed?: string | null
           session_id?: string
           user_agent?: string | null

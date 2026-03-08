@@ -10,6 +10,9 @@ const getSessionId = () => {
   return sid;
 };
 
+const getScreenResolution = () =>
+  `${window.screen.width}x${window.screen.height}`;
+
 export const useVisitorTracking = () => {
   const trackedSections = useRef<Set<string>>(new Set());
 
@@ -22,9 +25,10 @@ export const useVisitorTracking = () => {
       page_url: window.location.pathname,
       section_viewed: 'page_load',
       user_agent: navigator.userAgent,
+      referrer: document.referrer || null,
+      screen_resolution: getScreenResolution(),
     });
 
-    // Track sections via IntersectionObserver
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -38,6 +42,8 @@ export const useVisitorTracking = () => {
                 page_url: window.location.pathname,
                 section_viewed: sectionId,
                 user_agent: navigator.userAgent,
+                referrer: document.referrer || null,
+                screen_resolution: getScreenResolution(),
               });
             }
           }
