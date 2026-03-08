@@ -14,13 +14,11 @@ export const useVisitorTracking = () => {
   const trackedSections = useRef<Set<string>>(new Set());
 
   useEffect(() => {
-    // Track initial page load
     const sessionId = getSessionId();
-    const email = localStorage.getItem('visitor_email');
 
     supabase.from('site_visits').insert({
       session_id: sessionId,
-      visitor_email: email,
+      visitor_email: null,
       page_url: window.location.pathname,
       section_viewed: 'page_load',
       user_agent: navigator.userAgent,
@@ -36,7 +34,7 @@ export const useVisitorTracking = () => {
               trackedSections.current.add(sectionId);
               supabase.from('site_visits').insert({
                 session_id: getSessionId(),
-                visitor_email: localStorage.getItem('visitor_email'),
+                visitor_email: null,
                 page_url: window.location.pathname,
                 section_viewed: sectionId,
                 user_agent: navigator.userAgent,
@@ -48,7 +46,6 @@ export const useVisitorTracking = () => {
       { threshold: 0.3 }
     );
 
-    // Observe all sections with IDs
     setTimeout(() => {
       document.querySelectorAll('section[id], div[id]').forEach((el) => {
         if (el.id) observer.observe(el);
@@ -57,8 +54,4 @@ export const useVisitorTracking = () => {
 
     return () => observer.disconnect();
   }, []);
-};
-
-export const setVisitorEmail = (email: string) => {
-  localStorage.setItem('visitor_email', email);
 };
