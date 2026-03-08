@@ -283,7 +283,7 @@ function AIProjectsEditor({ data, setData }: { data: any; setData: (d: any) => v
               <Label>Screenshot</Label>
               {p.screenshot ? (
                 <div className="mt-2 relative inline-block">
-                  <img src={p.screenshot} alt="Screenshot" className="w-full max-w-xs rounded-lg border border-border" />
+                  <img src={p.screenshot} alt="Screenshot" className="w-full max-w-2xl rounded-lg border border-border" />
                   <Button variant="destructive" size="icon" className="absolute top-1 right-1 h-6 w-6" onClick={() => handleRemoveScreenshot(i)}>
                     <X className="w-3 h-3" />
                   </Button>
