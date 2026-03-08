@@ -103,13 +103,10 @@ const Contact: React.FC = () => {
           </button>
 
           {showOptions && (
-            <div className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-3 flex gap-3 ${isClosing ? 'animate-exit' : 'animate-enter'}`}>
+            <div className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-3 flex gap-3 ${isClosing ? 'animate-exit pointer-events-none' : 'animate-enter'}`}>
               <a
                 href="mailto:harishkanna068@gmail.com"
-                onClick={(e) => {
-                  e.preventDefault();
-                  window.location.href = 'mailto:harishkanna068@gmail.com';
-                }}
+                onClick={handleEmailClick}
                 className="flex items-center gap-2 px-5 py-3 rounded-xl glass hover:glow-border transition-all duration-300 text-foreground text-sm font-medium whitespace-nowrap"
               >
                 <Mail className="w-4 h-4 text-primary" />
@@ -119,6 +116,7 @@ const Contact: React.FC = () => {
                 href="https://wa.me/918056073997?text=Hi%F0%9F%91%8B"
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => closePopover()}
                 className="flex items-center gap-2 px-5 py-3 rounded-xl glass hover:glow-border transition-all duration-300 text-foreground text-sm font-medium whitespace-nowrap"
               >
                 <MessageCircle className="w-4 h-4 text-primary" />
