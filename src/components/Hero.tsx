@@ -23,11 +23,20 @@ const Hero: React.FC = () => {
         </h1>
 
         <p className="text-xl md:text-2xl text-muted-foreground font-light mb-4 tracking-wide">
-          Full Stack Developer | Agentic AI & Machine Learning
+          AI Engineer | Full Stack Developer | LLM Applications
         </p>
+
+        <div className="flex flex-wrap items-center justify-center gap-2 mb-6">
+          {['AI Engineer', 'LLM Applications', 'Python Developer', 'Generative AI'].map(tag => (
+            <span key={tag} className="px-3 py-1 text-xs font-medium rounded-full border border-primary/30 bg-primary/10 text-primary">
+              {tag}
+            </span>
+          ))}
+        </div>
+
         <p className="text-base text-muted-foreground/70 max-w-2xl mx-auto mb-10 leading-relaxed">
-          Building intelligent web applications using Agentic AI systems, Generative AI, 
-          and modern full-stack technologies.
+          Python developer building intelligent web applications with Agentic AI systems, 
+          Generative AI, and modern full-stack technologies.
         </p>
 
         <div className="flex items-center justify-center gap-6 mb-12 text-sm text-muted-foreground">
