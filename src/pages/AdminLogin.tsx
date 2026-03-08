@@ -43,7 +43,7 @@ const AdminLogin = () => {
       return;
     }
 
-    toast({ title: 'Welcome, Admin!' });
+    toast({ title: 'Welcome, Kanna!' });
     navigate('/admin/dashboard');
     setLoading(false);
   };
