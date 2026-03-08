@@ -37,7 +37,7 @@ const AIProjects: React.FC = () => {
                   <img
                     src={project.screenshot}
                     alt={`${project.title} screenshot`}
-                    className="absolute -top-32 left-0 right-0 h-[calc(100%+8rem)] w-full object-cover rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none z-10 shadow-2xl"
+                    className="absolute -top-32 left-0 right-0 w-full object-contain rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none z-10 shadow-2xl"
                   />
                 )}
               </div>
