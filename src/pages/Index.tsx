@@ -12,10 +12,12 @@ import Education from '@/components/Education';
 import Certifications from '@/components/Certifications';
 import Contact from '@/components/Contact';
 import LoadingScreen from '@/components/LoadingScreen';
+import { useVisitorTracking } from '@/hooks/useVisitorTracking';
 
 const Hero = React.lazy(() => import('@/components/Hero'));
 
 const Index = () => {
+  useVisitorTracking();
   return (
     <div className="min-h-screen bg-background">
       <LoadingScreen />
