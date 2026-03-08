@@ -8,7 +8,7 @@ const certs = [
   { title: 'AI Prompt Engineering', issuers: ['Microsoft', 'IBM', 'AWS', 'Infosys'] },
   { title: 'ChatGPT on Python', issuers: ['Simplilearn'] },
   { title: 'Agentic AI by Claude', issuers: ['Anthropic (Open Claw)'] },
-  { title: 'Clawbot', issuers: ['Anthropic'] },
+  { title: 'Claude Code in Action', issuers: ['Anthropic'] },
 ];
 
 const Certifications: React.FC = () => {
