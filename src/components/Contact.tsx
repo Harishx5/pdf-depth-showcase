@@ -68,16 +68,22 @@ const Contact: React.FC = () => {
       <ScrollAnimation delay={0.25}>
         <div className="relative inline-block" ref={popoverRef}>
           <button
-            onClick={() => setShowOptions(!showOptions)}
+            onClick={togglePopover}
             className="inline-flex items-center gap-2 px-10 py-4 rounded-full bg-primary text-primary-foreground font-medium text-lg hover:shadow-lg hover:shadow-primary/25 transition-all duration-300 hover:-translate-y-0.5"
           >
             Say Hello <ArrowUpRight className="w-5 h-5" />
           </button>
 
           {showOptions && (
-            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 flex gap-3 animate-fade-in">
+            <div className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-3 flex gap-3 ${isClosing ? 'animate-exit' : 'animate-enter'}`}>
               <a
                 href="mailto:harishkanna068@gmail.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.open('mailto:harishkanna068@gmail.com', '_blank');
+                }}
                 className="flex items-center gap-2 px-5 py-3 rounded-xl glass hover:glow-border transition-all duration-300 text-foreground text-sm font-medium whitespace-nowrap"
               >
                 <Mail className="w-4 h-4 text-primary" />
@@ -89,7 +95,7 @@ const Contact: React.FC = () => {
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 px-5 py-3 rounded-xl glass hover:glow-border transition-all duration-300 text-foreground text-sm font-medium whitespace-nowrap"
               >
-                <MessageCircle className="w-4 h-4 text-green-400" />
+                <MessageCircle className="w-4 h-4 text-primary" />
                 WhatsApp
               </a>
             </div>
