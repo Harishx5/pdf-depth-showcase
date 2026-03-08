@@ -4,11 +4,12 @@ import { Rocket } from 'lucide-react';
 
 const topics = [
   'Agentic AI',
-  'Autonomous AI Systems',
-  'RAG Architectures',
+  'Autonomous AI Workflows',
+  'RAG Systems',
   'AI Agents',
   'Multi-Agent Orchestration',
   'Fine-Tuning LLMs',
+  'LLM Applications',
 ];
 
 const CurrentlyExploring: React.FC = () => {

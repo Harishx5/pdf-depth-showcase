@@ -1,5 +1,5 @@
+import React, { Suspense } from 'react';
 import Navbar from '@/components/Navbar';
-import Hero from '@/components/Hero';
 import About from '@/components/About';
 import Experience from '@/components/Experience';
 import Projects from '@/components/Projects';
@@ -13,12 +13,16 @@ import Certifications from '@/components/Certifications';
 import Contact from '@/components/Contact';
 import LoadingScreen from '@/components/LoadingScreen';
 
+const Hero = React.lazy(() => import('@/components/Hero'));
+
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <LoadingScreen />
       <Navbar />
-      <Hero />
+      <Suspense fallback={<div className="min-h-screen bg-background" />}>
+        <Hero />
+      </Suspense>
       <About />
       <AICapabilities />
       <AIProjects />
