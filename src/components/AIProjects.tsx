@@ -23,7 +23,7 @@ const AIProjects: React.FC = () => {
       <div className="grid md:grid-cols-2 gap-6">
         {data.projects.map((project, i) => (
           <ScrollAnimation key={i} delay={0.1 + i * 0.1} direction="scale">
-            <div className="glass rounded-2xl p-8 relative overflow-hidden group hover:border-primary/30 transition-all duration-500">
+            <div className="glass rounded-2xl p-8 relative group hover:border-primary/30 transition-all duration-500">
               <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-primary/60 to-transparent opacity-60 group-hover:opacity-100 transition-opacity" />
               <div className="relative min-h-[120px]">
                 <div className={`transition-opacity duration-500 ${project.screenshot ? 'group-hover:opacity-0' : ''}`}>
@@ -37,7 +37,7 @@ const AIProjects: React.FC = () => {
                   <img
                     src={project.screenshot}
                     alt={`${project.title} screenshot`}
-                    className="absolute inset-0 w-full h-full object-cover rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                    className="absolute -top-32 left-0 right-0 h-[calc(100%+8rem)] w-full object-cover rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none z-10 shadow-2xl"
                   />
                 )}
               </div>
