@@ -26,13 +26,7 @@ const Navbar: React.FC = () => {
       scrolled ? 'glass py-3' : 'py-5'
     )}>
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-        <button
-          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-          className="w-10 h-10 rounded-full border border-border flex items-center justify-center hover:bg-accent transition-colors duration-300"
-          aria-label="Toggle theme"
-        >
-          {mounted && (theme === 'dark' ? <Sun className="w-5 h-5 text-foreground" /> : <Moon className="w-5 h-5 text-foreground" />)}
-        </button>
+        <ThemeToggle />
 
         {/* Desktop */}
         <div className="hidden md:flex items-center gap-8">
