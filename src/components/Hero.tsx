@@ -1,6 +1,6 @@
 import React from 'react';
 import Interactive3DScene from './Interactive3DScene';
-import { Mail, Github, MapPin, ArrowDown } from 'lucide-react';
+import { Mail, Github, MapPin, ArrowDown, Download } from 'lucide-react';
 
 const Hero: React.FC = () => {
   return (
@@ -23,11 +23,20 @@ const Hero: React.FC = () => {
         </h1>
 
         <p className="text-xl md:text-2xl text-muted-foreground font-light mb-4 tracking-wide">
-          Full Stack Developer | Agentic AI & Machine Learning
+          AI Engineer | Full Stack Developer | LLM Applications
         </p>
+
+        <div className="flex flex-wrap items-center justify-center gap-2 mb-6">
+          {['AI Engineer', 'LLM Applications', 'Python Developer', 'Generative AI'].map(tag => (
+            <span key={tag} className="px-3 py-1 text-xs font-medium rounded-full border border-primary/30 bg-primary/10 text-primary">
+              {tag}
+            </span>
+          ))}
+        </div>
+
         <p className="text-base text-muted-foreground/70 max-w-2xl mx-auto mb-10 leading-relaxed">
-          Building intelligent web applications using Agentic AI systems, Generative AI, 
-          and modern full-stack technologies.
+          Python developer building intelligent web applications with Agentic AI systems, 
+          Generative AI, and modern full-stack technologies.
         </p>
 
         <div className="flex items-center justify-center gap-6 mb-12 text-sm text-muted-foreground">
@@ -50,6 +59,13 @@ const Hero: React.FC = () => {
             className="px-8 py-3 rounded-full border border-border text-foreground hover:border-primary/50 hover:text-primary transition-all duration-300"
           >
             Contact Me
+          </a>
+          <a
+            href="/resume.pdf"
+            download
+            className="px-8 py-3 rounded-full border border-primary/50 text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 flex items-center gap-2"
+          >
+            <Download className="w-4 h-4" /> Resume
           </a>
         </div>
       </div>
