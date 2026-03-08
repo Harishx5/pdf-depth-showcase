@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Lock, Mail, Eye, EyeOff } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { LampContainer } from '@/components/ui/lamp';
 
 const AdminLogin = () => {
   const [email, setEmail] = useState('');
@@ -48,8 +49,8 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <Card className="w-full max-w-md border-border/50 shadow-xl">
+    <LampContainer>
+      <Card className="w-full max-w-md border-border/50 shadow-xl bg-slate-900/80 backdrop-blur-md">
         <CardHeader className="text-center space-y-2">
           <div className="mx-auto w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mb-2">
             <Lock className="w-7 h-7 text-primary" />
@@ -96,7 +97,7 @@ const AdminLogin = () => {
           </form>
         </CardContent>
       </Card>
-    </div>
+    </LampContainer>
   );
 };
 
