@@ -38,7 +38,12 @@ const Projects: React.FC = () => {
                   />
                 )}
               </div>
-              <div className="flex items-center gap-3 relative z-20">
+              <div className="flex flex-wrap gap-2 mb-6">
+                {project.tech.map(t => (
+                  <span key={t} className="text-xs px-3 py-1 rounded-full border border-primary/20 text-primary/80 bg-primary/5">{t}</span>
+                ))}
+              </div>
+              <div className="flex items-center gap-3">
                 <a href={project.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-sm font-medium text-foreground hover:text-primary transition-colors">
                   <ExternalLink className="w-4 h-4" /> Live Demo
                 </a>
