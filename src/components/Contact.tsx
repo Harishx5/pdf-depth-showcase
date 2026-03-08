@@ -1,8 +1,21 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import ScrollAnimation from './ScrollAnimation';
-import { Mail, Phone, MapPin, Github, ArrowUpRight } from 'lucide-react';
+import { Mail, Phone, MapPin, Github, ArrowUpRight, MessageCircle } from 'lucide-react';
 
 const Contact: React.FC = () => {
+  const [showOptions, setShowOptions] = useState(false);
+  const popoverRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (popoverRef.current && !popoverRef.current.contains(e.target as Node)) {
+        setShowOptions(false);
+      }
+    };
+    if (showOptions) document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showOptions]);
+
   return (
     <section id="contact" className="section-padding max-w-4xl mx-auto text-center">
       <ScrollAnimation>
@@ -36,12 +49,35 @@ const Contact: React.FC = () => {
       </ScrollAnimation>
 
       <ScrollAnimation delay={0.25}>
-        <a
-          href="mailto:harishkanna068@gmail.com"
-          className="inline-flex items-center gap-2 px-10 py-4 rounded-full bg-primary text-primary-foreground font-medium text-lg hover:shadow-lg hover:shadow-primary/25 transition-all duration-300 hover:-translate-y-0.5"
-        >
-          Say Hello <ArrowUpRight className="w-5 h-5" />
-        </a>
+        <div className="relative inline-block" ref={popoverRef}>
+          <button
+            onClick={() => setShowOptions(!showOptions)}
+            className="inline-flex items-center gap-2 px-10 py-4 rounded-full bg-primary text-primary-foreground font-medium text-lg hover:shadow-lg hover:shadow-primary/25 transition-all duration-300 hover:-translate-y-0.5"
+          >
+            Say Hello <ArrowUpRight className="w-5 h-5" />
+          </button>
+
+          {showOptions && (
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 flex gap-3 animate-fade-in">
+              <a
+                href="mailto:harishkanna068@gmail.com"
+                className="flex items-center gap-2 px-5 py-3 rounded-xl glass hover:glow-border transition-all duration-300 text-foreground text-sm font-medium whitespace-nowrap"
+              >
+                <Mail className="w-4 h-4 text-primary" />
+                Email
+              </a>
+              <a
+                href="https://wa.me/918056073997?text=Hi%F0%9F%91%8B"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-5 py-3 rounded-xl glass hover:glow-border transition-all duration-300 text-foreground text-sm font-medium whitespace-nowrap"
+              >
+                <MessageCircle className="w-4 h-4 text-green-400" />
+                WhatsApp
+              </a>
+            </div>
+          )}
+        </div>
       </ScrollAnimation>
 
       {/* Footer */}
