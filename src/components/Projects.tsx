@@ -34,7 +34,7 @@ const Projects: React.FC = () => {
                   <img
                     src={project.screenshot}
                     alt={`${project.name} screenshot`}
-                    className="absolute -top-32 -left-32 -right-[30rem] w-[calc(100%+90rem)] object-contain rounded-xl opacity-0 group-hover:opacity-100 group-hover:animate-fade-in pointer-events-none z-10 shadow-2xl"
+                    className="absolute bottom-0 left-0 -right-96 w-[calc(100%+90rem)] object-contain rounded-xl opacity-0 group-hover:opacity-100 group-hover:animate-fade-in pointer-events-none z-10 shadow-2xl"
                   />
                 )}
               </div>
