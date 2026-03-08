@@ -23,11 +23,11 @@ const Hero: React.FC = () => {
         </h1>
 
         <p className="text-xl md:text-2xl text-muted-foreground font-light mb-4 tracking-wide">
-          Full Stack Web Developer
+          Full Stack Developer | Agentic AI & Machine Learning
         </p>
         <p className="text-base text-muted-foreground/70 max-w-2xl mx-auto mb-10 leading-relaxed">
-          Specializing in Generative AI & Prompt Engineering — building intelligent solutions 
-          with modern web technologies
+          Building intelligent web applications using Agentic AI systems, Generative AI, 
+          and modern full-stack technologies.
         </p>
 
         <div className="flex items-center justify-center gap-6 mb-12 text-sm text-muted-foreground">
@@ -43,13 +43,13 @@ const Hero: React.FC = () => {
             href="#projects"
             className="px-8 py-3 rounded-full bg-primary text-primary-foreground font-medium hover:shadow-lg hover:shadow-primary/25 transition-all duration-300 hover:-translate-y-0.5"
           >
-            View My Work
+            View Projects
           </a>
           <a
             href="#contact"
             className="px-8 py-3 rounded-full border border-border text-foreground hover:border-primary/50 hover:text-primary transition-all duration-300"
           >
-            Get In Touch
+            Contact Me
           </a>
         </div>
       </div>

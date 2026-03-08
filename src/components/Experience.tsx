@@ -4,13 +4,13 @@ import { Briefcase, CheckCircle2 } from 'lucide-react';
 
 const Experience: React.FC = () => {
   const achievements = [
-    'Developed AI-driven applications using prompt engineering techniques',
-    'Built front-end UI components using no-code/low-code platforms like Bolt, Lovable, and Vibe Code Studio',
-    'Designed intelligent workflows using LLMs for automation and recommendation systems',
-    'Integrated third-party APIs and backend services (Supabase, Netlify)',
+    'Built AI-driven applications using prompt engineering and LLM integrations',
+    'Developed front-end UI components using React, TypeScript, and modern frameworks',
+    'Integrated backend services such as Supabase and Netlify for scalable deployment',
+    'Designed AI workflows and automation systems using Generative AI tools',
     'Engineered prompt templates improving response accuracy by 30–40%',
-    'Reduced build time by over 50% using Vibe Code Studio',
-    'Successfully launched AI-powered inventory management and skill swap platforms',
+    'Built multiple deployed AI-powered applications including inventory and skill-exchange platforms',
+    'Implemented Agentic AI patterns for autonomous task execution and intelligent recommendations',
   ];
 
   return (

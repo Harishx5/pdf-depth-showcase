@@ -1,12 +1,12 @@
 import React from 'react';
 import ScrollAnimation from './ScrollAnimation';
-import { Brain, Code2, Sparkles } from 'lucide-react';
+import { Bot, Code2, Sparkles } from 'lucide-react';
 
 const About: React.FC = () => {
   const highlights = [
-    { icon: Brain, title: 'AI & Prompt Engineering', desc: 'Crafting efficient prompts for GPT-4 and other LLMs to achieve accurate, production-ready results.' },
-    { icon: Code2, title: 'Full Stack Development', desc: 'Building scalable web applications with React, TypeScript, and modern backend services.' },
-    { icon: Sparkles, title: 'Creative Problem Solver', desc: 'Leveraging AI tools and no-code platforms to deliver rapid, high-quality solutions.' },
+    { icon: Bot, title: 'Agentic AI Systems', desc: 'Designing autonomous AI workflows with prompt chaining, tool-based agents, and intelligent task automation.' },
+    { icon: Code2, title: 'Full Stack Development', desc: 'Building scalable web applications with React, TypeScript, and modern backend services like Supabase.' },
+    { icon: Sparkles, title: 'AI-Powered Solutions', desc: 'Leveraging Generative AI tools and LLM integrations to automate workflows and deliver scalable digital solutions.' },
   ];
 
   return (
@@ -20,11 +20,11 @@ const About: React.FC = () => {
 
       <ScrollAnimation delay={0.1}>
         <p className="text-muted-foreground text-lg leading-relaxed max-w-3xl mb-16">
-          I am a dedicated professional with proficiency in Generative AI and Prompt Engineering, 
-          developing efficient prompts for AI models such as GPT-4 to achieve accurate results. 
-          I specialize in creating proper prompts, adjusting AI models, and using generative AI 
-          to enhance creativity and address various challenges. I continuously follow the latest 
-          trends in AI to create effective solutions that enhance performance and drive automation.
+          I am a full stack developer focused on building intelligent applications powered by 
+          Agentic AI, Generative AI, and modern web technologies. I specialize in creating 
+          AI-driven tools that automate workflows, improve decision-making, and deliver 
+          scalable digital solutions. With expertise in prompt engineering and LLM integrations, 
+          I bridge the gap between cutting-edge AI capabilities and production-ready applications.
         </p>
       </ScrollAnimation>
 
