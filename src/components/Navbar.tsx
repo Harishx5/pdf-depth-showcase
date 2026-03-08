@@ -43,6 +43,7 @@ const Navbar: React.FC = () => {
             <a
               key={item.href}
               href={item.href}
+              {...(item.download ? { download: true, target: '_blank' } : {})}
               className="text-sm text-muted-foreground hover:text-primary transition-colors duration-300 tracking-wide uppercase"
             >
               {item.label}
