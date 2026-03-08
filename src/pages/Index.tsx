@@ -21,6 +21,7 @@ const Index = () => {
   useVisitorTracking();
   return (
     <div className="min-h-screen bg-background">
+      <EmailCollectionModal />
       <LoadingScreen />
       <Navbar />
       <Suspense fallback={<div className="min-h-screen bg-background" />}>
