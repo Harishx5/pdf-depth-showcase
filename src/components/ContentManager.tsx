@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -19,6 +19,12 @@ import {
   skillsDefaults, promptShowcaseDefaults, currentlyExploringDefaults,
   experienceDefaults, projectsDefaults, educationDefaults, certificationsDefaults, contactDefaults,
 } from '@/data/defaults';
+
+export const DEFAULT_SECTION_ORDER = [
+  'hero', 'about', 'ai_capabilities', 'ai_projects', 'skills',
+  'prompt_showcase', 'currently_exploring', 'experience', 'projects',
+  'education', 'certifications', 'contact',
+];
 
 const BUILT_IN_SECTIONS = [
   { key: 'hero', label: 'Hero' },
@@ -527,8 +533,12 @@ const ContentManager: React.FC = () => {
   const { toast } = useToast();
   const [sectionData, setSectionData] = useState<Record<string, any>>({});
   const [customSections, setCustomSections] = useState<{ key: string; label: string }[]>([]);
+  const [sectionOrder, setSectionOrder] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState<string | null>(null);
+  const dragItem = useRef<number | null>(null);
+  const dragOverItem = useRef<number | null>(null);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchAll = async () => {
@@ -536,24 +546,75 @@ const ContentManager: React.FC = () => {
       if (error) { toast({ title: 'Error loading content', description: error.message, variant: 'destructive' }); setLoading(false); return; }
       const map: Record<string, any> = {};
       const customs: { key: string; label: string }[] = [];
+      const customKeys: string[] = [];
       BUILT_IN_SECTIONS.forEach(s => {
         const found = data?.find(d => d.section_key === s.key);
         map[s.key] = found ? { ...DEFAULTS[s.key], ...(found.content as any) } : { ...DEFAULTS[s.key] };
       });
-      // Load custom sections
       data?.forEach(d => {
         if (d.section_key.startsWith('custom_')) {
           const content = d.content as any;
           map[d.section_key] = { ...CUSTOM_DEFAULT, ...content };
           customs.push({ key: d.section_key, label: content?.section_label || d.section_key });
+          customKeys.push(d.section_key);
         }
       });
+      // Load saved order
+      const orderRow = data?.find(d => d.section_key === 'section_order');
+      const savedOrder = orderRow ? (orderRow.content as any)?.order as string[] | undefined : undefined;
+      if (savedOrder && Array.isArray(savedOrder)) {
+        // Merge: keep saved order, append any new sections not in saved order
+        const allKeys = new Set([...DEFAULT_SECTION_ORDER, ...customKeys]);
+        const merged = savedOrder.filter(k => allKeys.has(k));
+        allKeys.forEach(k => { if (!merged.includes(k)) merged.push(k); });
+        setSectionOrder(merged);
+      } else {
+        setSectionOrder([...DEFAULT_SECTION_ORDER, ...customKeys]);
+      }
       setCustomSections(customs);
       setSectionData(map);
       setLoading(false);
     };
     fetchAll();
   }, []);
+
+  const saveOrder = useCallback(async (newOrder: string[]) => {
+    try {
+      await upsertSiteContent('section_order', { order: newOrder });
+    } catch (e: any) {
+      toast({ title: 'Error saving order', description: e.message, variant: 'destructive' });
+    }
+  }, [toast]);
+
+  const handleDragStart = (index: number) => {
+    dragItem.current = index;
+  };
+
+  const handleDragOver = (e: React.DragEvent, index: number) => {
+    e.preventDefault();
+    dragOverItem.current = index;
+    setDragOverIndex(index);
+  };
+
+  const handleDrop = () => {
+    if (dragItem.current === null || dragOverItem.current === null || dragItem.current === dragOverItem.current) {
+      setDragOverIndex(null);
+      return;
+    }
+    const newOrder = [...sectionOrder];
+    const [removed] = newOrder.splice(dragItem.current, 1);
+    newOrder.splice(dragOverItem.current, 0, removed);
+    setSectionOrder(newOrder);
+    saveOrder(newOrder);
+    dragItem.current = null;
+    dragOverItem.current = null;
+    setDragOverIndex(null);
+    toast({ title: 'Order updated', description: 'Section order saved.' });
+  };
+
+  const handleDragEnd = () => {
+    setDragOverIndex(null);
+  };
 
   const handleSave = async (sectionKey: string) => {
     setSaving(sectionKey);
@@ -583,6 +644,11 @@ const ContentManager: React.FC = () => {
     const newData = { ...CUSTOM_DEFAULT };
     setSectionData(prev => ({ ...prev, [key]: newData }));
     setCustomSections(prev => [...prev, { key, label: 'New Section' }]);
+    setSectionOrder(prev => {
+      const newOrder = [...prev, key];
+      saveOrder(newOrder);
+      return newOrder;
+    });
   };
 
   const handleDeleteCustomSection = async (sectionKey: string) => {
@@ -590,6 +656,11 @@ const ContentManager: React.FC = () => {
       await supabase.from('site_content').delete().eq('section_key', sectionKey);
       setSectionData(prev => { const copy = { ...prev }; delete copy[sectionKey]; return copy; });
       setCustomSections(prev => prev.filter(s => s.key !== sectionKey));
+      setSectionOrder(prev => {
+        const newOrder = prev.filter(k => k !== sectionKey);
+        saveOrder(newOrder);
+        return newOrder;
+      });
       toast({ title: 'Deleted', description: 'Custom section removed.' });
     } catch (e: any) {
       toast({ title: 'Error deleting', description: e.message, variant: 'destructive' });
@@ -598,34 +669,48 @@ const ContentManager: React.FC = () => {
 
   if (loading) return <div className="p-8 text-center text-muted-foreground">Loading content...</div>;
 
-  const allSections = [...BUILT_IN_SECTIONS, ...customSections];
+  const allSectionsMap: Record<string, string> = {};
+  BUILT_IN_SECTIONS.forEach(s => { allSectionsMap[s.key] = s.label; });
+  customSections.forEach(s => { allSectionsMap[s.key] = s.label; });
 
   return (
     <div className="space-y-4">
       <Accordion type="single" collapsible className="space-y-2">
-        {allSections.map(section => {
-          const isCustom = section.key.startsWith('custom_');
-          const Editor = isCustom ? CustomSectionEditor : EDITORS[section.key];
-          const data = sectionData[section.key];
+        {sectionOrder.map((key, index) => {
+          const label = allSectionsMap[key];
+          if (!label) return null;
+          const isCustom = key.startsWith('custom_');
+          const Editor = isCustom ? CustomSectionEditor : EDITORS[key];
+          const data = sectionData[key];
           if (!Editor || !data) return null;
           return (
-            <AccordionItem key={section.key} value={section.key} className="border rounded-lg px-4">
+            <AccordionItem
+              key={key}
+              value={key}
+              className={`border rounded-lg px-4 transition-all duration-200 ${dragOverIndex === index ? 'border-primary border-2' : ''}`}
+              draggable
+              onDragStart={() => handleDragStart(index)}
+              onDragOver={(e) => handleDragOver(e, index)}
+              onDrop={handleDrop}
+              onDragEnd={handleDragEnd}
+            >
               <AccordionTrigger className="text-base font-semibold hover:no-underline">
                 <div className="flex items-center gap-2">
-                  {section.label}
+                  <GripVertical className="w-4 h-4 text-muted-foreground cursor-grab active:cursor-grabbing" />
+                  {label}
                   {isCustom && <Badge variant="secondary" className="text-xs">Custom</Badge>}
                 </div>
               </AccordionTrigger>
               <AccordionContent>
                 <div className="pb-4">
-                  <Editor data={data} setData={d => setSectionData(prev => ({ ...prev, [section.key]: d }))} />
+                  <Editor data={data} setData={d => setSectionData(prev => ({ ...prev, [key]: d }))} />
                   <div className="flex gap-2 mt-6">
-                    <Button onClick={() => handleSave(section.key)} disabled={saving === section.key}>
-                      <Save className="w-4 h-4 mr-2" /> {saving === section.key ? 'Saving...' : 'Save'}
+                    <Button onClick={() => handleSave(key)} disabled={saving === key}>
+                      <Save className="w-4 h-4 mr-2" /> {saving === key ? 'Saving...' : 'Save'}
                     </Button>
-                    <Button variant="outline" onClick={() => handleResetSection(section.key)}>Reset to Default</Button>
+                    <Button variant="outline" onClick={() => handleResetSection(key)}>Reset to Default</Button>
                     {isCustom && (
-                      <Button variant="destructive" onClick={() => handleDeleteCustomSection(section.key)}>
+                      <Button variant="destructive" onClick={() => handleDeleteCustomSection(key)}>
                         <Trash2 className="w-4 h-4 mr-2" /> Delete Section
                       </Button>
                     )}

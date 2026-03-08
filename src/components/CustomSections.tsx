@@ -17,7 +17,7 @@ interface CustomSectionData {
   items: CustomItem[];
 }
 
-const CustomSections: React.FC = () => {
+const CustomSections: React.FC<{ order: string[] }> = ({ order }) => {
   const { data: sections } = useQuery({
     queryKey: ['custom-sections'],
     queryFn: async () => {
@@ -36,9 +36,17 @@ const CustomSections: React.FC = () => {
 
   if (!sections?.length) return null;
 
+  const sectionMap = new Map(sections.map(s => [s.key, s]));
+  const customKeysInOrder = order.filter(k => k.startsWith('custom_') && sectionMap.has(k));
+  sections.forEach(s => { if (!customKeysInOrder.includes(s.key)) customKeysInOrder.push(s.key); });
+
   return (
     <>
-      {sections.map(({ key, content }) => (
+      {customKeysInOrder.map(key => {
+        const section = sectionMap.get(key);
+        if (!section) return null;
+        const { content } = section;
+        return (
         <section key={key} className="py-20 px-4 sm:px-6 lg:px-8">
           <div className="max-w-6xl mx-auto">
             <ScrollAnimation>
@@ -64,7 +72,9 @@ const CustomSections: React.FC = () => {
             </div>
           </div>
         </section>
-      ))}
+        );
+      })}
+
     </>
   );
 };
