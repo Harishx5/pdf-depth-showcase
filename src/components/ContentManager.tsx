@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -19,6 +19,12 @@ import {
   skillsDefaults, promptShowcaseDefaults, currentlyExploringDefaults,
   experienceDefaults, projectsDefaults, educationDefaults, certificationsDefaults, contactDefaults,
 } from '@/data/defaults';
+
+export const DEFAULT_SECTION_ORDER = [
+  'hero', 'about', 'ai_capabilities', 'ai_projects', 'skills',
+  'prompt_showcase', 'currently_exploring', 'experience', 'projects',
+  'education', 'certifications', 'contact',
+];
 
 const BUILT_IN_SECTIONS = [
   { key: 'hero', label: 'Hero' },
