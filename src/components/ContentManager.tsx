@@ -656,6 +656,11 @@ const ContentManager: React.FC = () => {
       await supabase.from('site_content').delete().eq('section_key', sectionKey);
       setSectionData(prev => { const copy = { ...prev }; delete copy[sectionKey]; return copy; });
       setCustomSections(prev => prev.filter(s => s.key !== sectionKey));
+      setSectionOrder(prev => {
+        const newOrder = prev.filter(k => k !== sectionKey);
+        saveOrder(newOrder);
+        return newOrder;
+      });
       toast({ title: 'Deleted', description: 'Custom section removed.' });
     } catch (e: any) {
       toast({ title: 'Error deleting', description: e.message, variant: 'destructive' });
