@@ -14,10 +14,6 @@ const skillCategories = [
     title: 'AI & Prompt Engineering',
     skills: ['Generative AI', 'GPT-4', 'Gemini', 'Prompt Design', 'LLM Fine-tuning', 'AI Automation'],
   },
-  {
-    title: 'No-Code / Low-Code',
-    skills: ['Lovable', 'Bolt', 'V0', 'Vibe Code Studio'],
-  },
 ];
 
 const Skills: React.FC = () => {
