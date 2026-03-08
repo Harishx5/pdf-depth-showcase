@@ -1,64 +1,30 @@
 import React, { useState } from 'react';
 import ScrollAnimation from './ScrollAnimation';
 import { Terminal, ArrowDown, Zap } from 'lucide-react';
-
-const examples = [
-  {
-    id: 'content',
-    title: 'AI Content Generator',
-    prompt: `Role: AI Content Strategist
-Task: Generate SEO optimized article
-Constraints: 1000 words, keyword density 2%
-Output Format: Markdown with headings`,
-    output: 'Structured, keyword-rich articles with proper heading hierarchy and meta descriptions.',
-  },
-  {
-    id: 'data',
-    title: 'AI Data Analyzer',
-    prompt: `Analyze the dataset and detect anomalies
-in sales patterns.
-
-Return:
-  - Key insights
-  - Predictions for next quarter
-  - Visual summary recommendations`,
-    output: 'Automated anomaly detection with actionable insights and visualization suggestions.',
-  },
-  {
-    id: 'chatbot',
-    title: 'AI Chatbot Logic',
-    workflow: [
-      'User Input',
-      'Prompt Template',
-      'LLM Processing',
-      'Structured Output',
-    ],
-  },
-];
+import { useSiteContent } from '@/hooks/useSiteContent';
+import { promptShowcaseDefaults } from '@/data/defaults';
 
 const PromptShowcase: React.FC = () => {
+  const { data } = useSiteContent('prompt_showcase', promptShowcaseDefaults);
   const [active, setActive] = useState(0);
-  const ex = examples[active];
+  const ex = data.examples[active];
 
   return (
     <section id="prompt-showcase" className="section-padding max-w-6xl mx-auto">
       <ScrollAnimation>
         <div className="flex items-center gap-3 mb-3">
           <Terminal className="w-4 h-4 text-primary" />
-          <p className="text-primary text-sm tracking-widest uppercase">Prompt Engineering</p>
+          <p className="text-primary text-sm tracking-widest uppercase">{data.section_label}</p>
         </div>
         <h2 className="text-3xl md:text-5xl font-bold mb-4 tracking-tight" style={{ fontFamily: 'Space Grotesk' }}>
-          LLM <span className="text-gradient">Workflow Design</span>
+          {data.title_prefix}<span className="text-gradient">{data.title_highlight}</span>
         </h2>
-        <p className="text-muted-foreground max-w-2xl mb-12">
-          Demonstrating structured prompt design, LLM architecture thinking, and AI automation workflows.
-        </p>
+        <p className="text-muted-foreground max-w-2xl mb-12">{data.description}</p>
       </ScrollAnimation>
 
       <ScrollAnimation delay={0.1}>
-        {/* Tabs */}
         <div className="flex gap-2 mb-6 flex-wrap">
-          {examples.map((e, i) => (
+          {data.examples.map((e, i) => (
             <button
               key={e.id}
               onClick={() => setActive(i)}
@@ -73,7 +39,6 @@ const PromptShowcase: React.FC = () => {
           ))}
         </div>
 
-        {/* Content */}
         <div className="glass rounded-2xl p-8">
           {'workflow' in ex && ex.workflow ? (
             <div>
@@ -102,9 +67,7 @@ const PromptShowcase: React.FC = () => {
               </div>
               <div>
                 <h4 className="text-xs uppercase tracking-wider text-muted-foreground mb-3">Expected Output</h4>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {(ex as any).output}
-                </p>
+                <p className="text-sm text-muted-foreground leading-relaxed">{(ex as any).output}</p>
               </div>
             </div>
           )}
