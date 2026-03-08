@@ -27,11 +27,14 @@ const Certifications: React.FC = () => {
             <div className="glass rounded-2xl p-6 hover:glow-border transition-all duration-500 group h-full">
               <Award className="w-8 h-8 text-primary mb-4 group-hover:scale-110 transition-transform" />
               <h3 className="text-base font-semibold text-foreground mb-3">{cert.title}</h3>
-              <div className="flex flex-wrap gap-2">
-                {cert.issuers.map(issuer => (
-                  <span key={issuer} className="text-xs text-muted-foreground px-2 py-0.5 rounded-md bg-secondary/70">
-                    {issuer}
-                  </span>
+              <div className="flex flex-wrap items-center gap-1.5">
+                {cert.issuers.map((issuer, idx) => (
+                  <React.Fragment key={issuer}>
+                    <span className="text-xs text-muted-foreground">{issuer}</span>
+                    {idx < cert.issuers.length - 1 && (
+                      <span className="text-xs text-border">·</span>
+                    )}
+                  </React.Fragment>
                 ))}
               </div>
             </div>
