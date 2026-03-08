@@ -669,34 +669,48 @@ const ContentManager: React.FC = () => {
 
   if (loading) return <div className="p-8 text-center text-muted-foreground">Loading content...</div>;
 
-  const allSections = [...BUILT_IN_SECTIONS, ...customSections];
+  const allSectionsMap: Record<string, string> = {};
+  BUILT_IN_SECTIONS.forEach(s => { allSectionsMap[s.key] = s.label; });
+  customSections.forEach(s => { allSectionsMap[s.key] = s.label; });
 
   return (
     <div className="space-y-4">
       <Accordion type="single" collapsible className="space-y-2">
-        {allSections.map(section => {
-          const isCustom = section.key.startsWith('custom_');
-          const Editor = isCustom ? CustomSectionEditor : EDITORS[section.key];
-          const data = sectionData[section.key];
+        {sectionOrder.map((key, index) => {
+          const label = allSectionsMap[key];
+          if (!label) return null;
+          const isCustom = key.startsWith('custom_');
+          const Editor = isCustom ? CustomSectionEditor : EDITORS[key];
+          const data = sectionData[key];
           if (!Editor || !data) return null;
           return (
-            <AccordionItem key={section.key} value={section.key} className="border rounded-lg px-4">
+            <AccordionItem
+              key={key}
+              value={key}
+              className={`border rounded-lg px-4 transition-all duration-200 ${dragOverIndex === index ? 'border-primary border-2' : ''}`}
+              draggable
+              onDragStart={() => handleDragStart(index)}
+              onDragOver={(e) => handleDragOver(e, index)}
+              onDrop={handleDrop}
+              onDragEnd={handleDragEnd}
+            >
               <AccordionTrigger className="text-base font-semibold hover:no-underline">
                 <div className="flex items-center gap-2">
-                  {section.label}
+                  <GripVertical className="w-4 h-4 text-muted-foreground cursor-grab active:cursor-grabbing" />
+                  {label}
                   {isCustom && <Badge variant="secondary" className="text-xs">Custom</Badge>}
                 </div>
               </AccordionTrigger>
               <AccordionContent>
                 <div className="pb-4">
-                  <Editor data={data} setData={d => setSectionData(prev => ({ ...prev, [section.key]: d }))} />
+                  <Editor data={data} setData={d => setSectionData(prev => ({ ...prev, [key]: d }))} />
                   <div className="flex gap-2 mt-6">
-                    <Button onClick={() => handleSave(section.key)} disabled={saving === section.key}>
-                      <Save className="w-4 h-4 mr-2" /> {saving === section.key ? 'Saving...' : 'Save'}
+                    <Button onClick={() => handleSave(key)} disabled={saving === key}>
+                      <Save className="w-4 h-4 mr-2" /> {saving === key ? 'Saving...' : 'Save'}
                     </Button>
-                    <Button variant="outline" onClick={() => handleResetSection(section.key)}>Reset to Default</Button>
+                    <Button variant="outline" onClick={() => handleResetSection(key)}>Reset to Default</Button>
                     {isCustom && (
-                      <Button variant="destructive" onClick={() => handleDeleteCustomSection(section.key)}>
+                      <Button variant="destructive" onClick={() => handleDeleteCustomSection(key)}>
                         <Trash2 className="w-4 h-4 mr-2" /> Delete Section
                       </Button>
                     )}
