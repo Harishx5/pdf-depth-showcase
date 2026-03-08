@@ -362,6 +362,34 @@ function ProjectsEditor({ data, setData }: { data: any; setData: (d: any) => voi
   const updateProject = (i: number, field: string, value: any) => {
     const p = [...data.projects]; p[i] = { ...p[i], [field]: value }; setData({ ...data, projects: p });
   };
+  const [uploading, setUploading] = React.useState<number | null>(null);
+
+  const handleScreenshotUpload = async (i: number, file: File) => {
+    if (!file.type.startsWith('image/')) return;
+    setUploading(i);
+    const ext = file.name.split('.').pop() || 'png';
+    const path = `project-${Date.now()}-${i}.${ext}`;
+    const { error } = await supabase.storage.from('project-screenshots').upload(path, file);
+    if (error) {
+      setUploading(null);
+      return;
+    }
+    const { data: urlData } = supabase.storage.from('project-screenshots').getPublicUrl(path);
+    updateProject(i, 'screenshot', urlData.publicUrl);
+    setUploading(null);
+  };
+
+  const handleRemoveScreenshot = async (i: number) => {
+    const url = data.projects[i]?.screenshot;
+    if (url) {
+      const parts = url.split('/project-screenshots/');
+      if (parts[1]) {
+        await supabase.storage.from('project-screenshots').remove([decodeURIComponent(parts[1])]);
+      }
+    }
+    updateProject(i, 'screenshot', '');
+  };
+
   return (
     <div className="space-y-4">
       <div><Label>Section Label</Label><Input value={data.section_label} onChange={e => setData({ ...data, section_label: e.target.value })} /></div>
@@ -380,7 +408,23 @@ function ProjectsEditor({ data, setData }: { data: any; setData: (d: any) => voi
               <div><Label>GitHub URL</Label><Input value={p.github} onChange={e => updateProject(i, 'github', e.target.value)} /></div>
             </div>
             <div><Label>Tech (comma separated)</Label><Input value={p.tech.join(', ')} onChange={e => updateProject(i, 'tech', e.target.value.split(',').map((t: string) => t.trim()).filter(Boolean))} /></div>
-            <div><Label>Screenshot URL</Label><Input value={p.screenshot || ''} onChange={e => updateProject(i, 'screenshot', e.target.value)} placeholder="https://example.com/screenshot.png" /></div>
+            <div>
+              <Label>Screenshot</Label>
+              {p.screenshot ? (
+                <div className="mt-2 relative inline-block">
+                  <img src={p.screenshot} alt="Screenshot" className="w-full max-w-xs rounded-lg border border-border" />
+                  <Button variant="destructive" size="icon" className="absolute top-1 right-1 h-6 w-6" onClick={() => handleRemoveScreenshot(i)}>
+                    <X className="w-3 h-3" />
+                  </Button>
+                </div>
+              ) : (
+                <label className="mt-2 flex items-center gap-2 cursor-pointer border border-dashed border-border rounded-lg p-4 hover:bg-muted/50 transition-colors">
+                  <Upload className="w-4 h-4 text-muted-foreground" />
+                  <span className="text-sm text-muted-foreground">{uploading === i ? 'Uploading...' : 'Upload screenshot (PNG/JPG)'}</span>
+                  <input type="file" accept="image/*" className="hidden" disabled={uploading === i} onChange={e => { const f = e.target.files?.[0]; if (f) handleScreenshotUpload(i, f); }} />
+                </label>
+              )}
+            </div>
             <div className="flex items-center gap-2">
               <Switch checked={p.highlight} onCheckedChange={v => updateProject(i, 'highlight', v)} />
               <Label>Highlight / Top Project</Label>
