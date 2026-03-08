@@ -72,7 +72,9 @@ const CustomSections: React.FC<{ order: string[] }> = ({ order }) => {
             </div>
           </div>
         </section>
-      ))}
+        );
+      })}
+
     </>
   );
 };
