@@ -60,6 +60,13 @@ const Hero: React.FC = () => {
           >
             Contact Me
           </a>
+          <a
+            href="/resume.pdf"
+            download
+            className="px-8 py-3 rounded-full border border-primary/50 text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 flex items-center gap-2"
+          >
+            <Download className="w-4 h-4" /> Resume
+          </a>
         </div>
       </div>
 
