@@ -25,11 +25,22 @@ const AIProjects: React.FC = () => {
           <ScrollAnimation key={i} delay={0.1 + i * 0.1} direction="scale">
             <div className="glass rounded-2xl p-8 relative overflow-hidden group hover:border-primary/30 transition-all duration-500">
               <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-primary/60 to-transparent opacity-60 group-hover:opacity-100 transition-opacity" />
-              <div className="flex items-start justify-between mb-4">
-                <h3 className="text-lg font-semibold text-foreground pr-4">{project.title}</h3>
-                <span className="shrink-0 px-2 py-1 text-[10px] uppercase tracking-wider font-semibold rounded-md bg-primary/10 text-primary border border-primary/20">AI</span>
+              <div className="relative min-h-[120px]">
+                <div className={`transition-opacity duration-500 ${project.screenshot ? 'group-hover:opacity-0' : ''}`}>
+                  <div className="flex items-start justify-between mb-4">
+                    <h3 className="text-lg font-semibold text-foreground pr-4">{project.title}</h3>
+                    <span className="shrink-0 px-2 py-1 text-[10px] uppercase tracking-wider font-semibold rounded-md bg-primary/10 text-primary border border-primary/20">AI</span>
+                  </div>
+                  <p className="text-muted-foreground text-sm leading-relaxed">{project.description}</p>
+                </div>
+                {project.screenshot && (
+                  <img
+                    src={project.screenshot}
+                    alt={`${project.title} screenshot`}
+                    className="absolute inset-0 w-full h-full object-cover rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                  />
+                )}
               </div>
-              <p className="text-muted-foreground text-sm leading-relaxed mb-6">{project.description}</p>
               <div className="flex flex-wrap gap-2 mb-6">
                 {project.tech.map((t, ti) => (
                   <span key={ti} className="px-3 py-1 text-xs rounded-lg bg-secondary/50 text-foreground border border-border">{t}</span>
