@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import ScrollAnimation from './ScrollAnimation';
-import { Mail, Phone, MapPin, Github, ArrowUpRight, MessageCircle } from 'lucide-react';
+import { Mail, Phone, MapPin, ArrowUpRight, MessageCircle } from 'lucide-react';
 
 const Contact: React.FC = () => {
   const [showOptions, setShowOptions] = useState(false);
@@ -12,7 +12,7 @@ const Contact: React.FC = () => {
     setTimeout(() => {
       setShowOptions(false);
       setIsClosing(false);
-    }, 300);
+    }, 200);
   };
 
   const togglePopover = () => {
@@ -23,23 +23,18 @@ const Contact: React.FC = () => {
     }
   };
 
-  const handleEmailClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    closePopover();
-    // Try mailto first via a hidden link click
+  const openEmail = () => {
     const link = document.createElement('a');
     link.href = 'mailto:harishkanna068@gmail.com';
     link.style.display = 'none';
     document.body.appendChild(link);
     link.click();
-    // Fallback: open Gmail compose in new tab after a short delay
     const fallbackTimer = setTimeout(() => {
       window.open(
         'https://mail.google.com/mail/?view=cm&to=harishkanna068@gmail.com',
         '_blank'
       );
-    }, 1500);
-    // If page loses focus, mailto worked — cancel fallback
+    }, 800);
     const onBlur = () => {
       clearTimeout(fallbackTimer);
       window.removeEventListener('blur', onBlur);
@@ -51,6 +46,12 @@ const Contact: React.FC = () => {
     }, 3000);
   };
 
+  const handleEmailClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    closePopover();
+    openEmail();
+  };
+
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (popoverRef.current && !popoverRef.current.contains(e.target as Node)) {
@@ -60,6 +61,12 @@ const Contact: React.FC = () => {
     if (showOptions) document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [showOptions]);
+
+  const contactItems = [
+    { icon: Mail, label: 'Email', value: 'harishkanna068@gmail.com', onClick: () => openEmail(), interactive: true },
+    { icon: Phone, label: 'Phone', value: '+91 8056073997', onClick: () => window.open('tel:+918056073997'), interactive: true },
+    { icon: MapPin, label: 'Location', value: 'India', onClick: undefined, interactive: false },
+  ];
 
   return (
     <section id="contact" className="section-padding max-w-4xl mx-auto text-center">
@@ -75,20 +82,24 @@ const Contact: React.FC = () => {
 
       <ScrollAnimation delay={0.15}>
         <div className="grid sm:grid-cols-3 gap-5 mb-12">
-          {[
-            { icon: Mail, label: 'Email', value: 'harishkanna068@gmail.com', href: 'mailto:harishkanna068@gmail.com' },
-            { icon: Phone, label: 'Phone', value: '+91 8056073997', href: 'tel:+918056073997' },
-            { icon: MapPin, label: 'Location', value: 'India', href: undefined },
-          ].map((item, i) => (
-            <a
+          {contactItems.map((item, i) => (
+            <div
               key={i}
-              href={item.href}
-              className="glass rounded-2xl p-6 group hover:glow-border transition-all duration-500 block"
+              onClick={item.onClick}
+              role={item.interactive ? 'button' : undefined}
+              tabIndex={item.interactive ? 0 : undefined}
+              className={`glass rounded-2xl p-6 group transition-all duration-500 ${
+                item.interactive
+                  ? 'cursor-pointer hover:glow-border hover:-translate-y-1 active:scale-[0.98]'
+                  : 'cursor-default'
+              }`}
             >
               <item.icon className="w-6 h-6 text-primary mx-auto mb-3" />
               <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">{item.label}</p>
-              <p className="text-sm text-foreground group-hover:text-primary transition-colors break-all">{item.value}</p>
-            </a>
+              <p className={`text-sm text-foreground break-all transition-colors ${
+                item.interactive ? 'group-hover:text-primary' : ''
+              }`}>{item.value}</p>
+            </div>
           ))}
         </div>
       </ScrollAnimation>
@@ -97,31 +108,41 @@ const Contact: React.FC = () => {
         <div className="relative inline-block" ref={popoverRef}>
           <button
             onClick={togglePopover}
-            className="inline-flex items-center gap-2 px-10 py-4 rounded-full bg-primary text-primary-foreground font-medium text-lg hover:shadow-lg hover:shadow-primary/25 transition-all duration-300 hover:-translate-y-0.5"
+            className="group inline-flex items-center gap-2 px-8 py-3 rounded-full border border-border text-foreground font-medium hover:border-primary/50 hover:text-primary transition-all duration-300"
           >
-            Say Hello <ArrowUpRight className="w-5 h-5" />
+            Say Hello
+            <ArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover:rotate-45" />
           </button>
 
           {showOptions && (
-            <div className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-3 flex gap-3 ${isClosing ? 'animate-exit pointer-events-none' : 'animate-enter'}`}>
-              <a
-                href="mailto:harishkanna068@gmail.com"
-                onClick={handleEmailClick}
-                className="flex items-center gap-2 px-5 py-3 rounded-xl glass hover:glow-border transition-all duration-300 text-foreground text-sm font-medium whitespace-nowrap"
-              >
-                <Mail className="w-4 h-4 text-primary" />
-                Email
-              </a>
-              <a
-                href="https://wa.me/918056073997?text=Hi%F0%9F%91%8B"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => closePopover()}
-                className="flex items-center gap-2 px-5 py-3 rounded-xl glass hover:glow-border transition-all duration-300 text-foreground text-sm font-medium whitespace-nowrap"
-              >
-                <MessageCircle className="w-4 h-4 text-primary" />
-                WhatsApp
-              </a>
+            <div
+              className={`absolute top-full left-1/2 -translate-x-1/2 mt-3 ${
+                isClosing ? 'animate-scale-out opacity-0' : 'animate-scale-in'
+              }`}
+            >
+              {/* Caret arrow */}
+              <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 rotate-45 bg-card border-l border-t border-border" />
+
+              <div className="relative flex gap-2 p-2 rounded-2xl bg-card/80 backdrop-blur-xl border border-border shadow-lg">
+                <a
+                  href="mailto:harishkanna068@gmail.com"
+                  onClick={handleEmailClick}
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl hover:bg-accent transition-colors text-foreground text-sm font-medium whitespace-nowrap"
+                >
+                  <Mail className="w-4 h-4 text-primary" />
+                  Email
+                </a>
+                <a
+                  href="https://wa.me/918056073997?text=Hi%F0%9F%91%8B"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => closePopover()}
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl hover:bg-accent transition-colors text-foreground text-sm font-medium whitespace-nowrap"
+                >
+                  <MessageCircle className="w-4 h-4 text-primary" />
+                  WhatsApp
+                </a>
+              </div>
             </div>
           )}
         </div>
