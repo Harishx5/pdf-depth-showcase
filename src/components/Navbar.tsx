@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
+import { useTheme } from 'next-themes';
+import { Sun, Moon } from 'lucide-react';
 
 const navItems = [
   { label: 'About', href: '#about' },
@@ -12,6 +14,10 @@ const navItems = [
 const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -25,10 +31,13 @@ const Navbar: React.FC = () => {
       scrolled ? 'glass py-3' : 'py-5'
     )}>
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-        <a href="#" className="text-xl font-bold tracking-tight" style={{ fontFamily: 'Space Grotesk' }}>
-          <span className="text-gradient">SK</span>
-          <span className="text-foreground ml-1">Harish</span>
-        </a>
+        <button
+          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+          className="w-10 h-10 rounded-full border border-border flex items-center justify-center hover:bg-accent transition-colors duration-300"
+          aria-label="Toggle theme"
+        >
+          {mounted && (theme === 'dark' ? <Sun className="w-5 h-5 text-foreground" /> : <Moon className="w-5 h-5 text-foreground" />)}
+        </button>
 
         {/* Desktop */}
         <div className="hidden md:flex items-center gap-8">
