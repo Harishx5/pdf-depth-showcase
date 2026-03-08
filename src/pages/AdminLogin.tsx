@@ -97,7 +97,7 @@ const AdminLogin = () => {
           </form>
         </CardContent>
       </Card>
-    </div>
+    </LampContainer>
   );
 };
 
