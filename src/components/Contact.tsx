@@ -4,12 +4,29 @@ import { Mail, Phone, MapPin, Github, ArrowUpRight, MessageCircle } from 'lucide
 
 const Contact: React.FC = () => {
   const [showOptions, setShowOptions] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
   const popoverRef = useRef<HTMLDivElement>(null);
+
+  const closePopover = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      setShowOptions(false);
+      setIsClosing(false);
+    }, 200);
+  };
+
+  const togglePopover = () => {
+    if (showOptions) {
+      closePopover();
+    } else {
+      setShowOptions(true);
+    }
+  };
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (popoverRef.current && !popoverRef.current.contains(e.target as Node)) {
-        setShowOptions(false);
+        closePopover();
       }
     };
     if (showOptions) document.addEventListener('mousedown', handleClickOutside);
