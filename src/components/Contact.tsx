@@ -12,7 +12,7 @@ const Contact: React.FC = () => {
     setTimeout(() => {
       setShowOptions(false);
       setIsClosing(false);
-    }, 200);
+    }, 300);
   };
 
   const togglePopover = () => {
@@ -21,6 +21,34 @@ const Contact: React.FC = () => {
     } else {
       setShowOptions(true);
     }
+  };
+
+  const handleEmailClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    closePopover();
+    // Try mailto first via a hidden link click
+    const link = document.createElement('a');
+    link.href = 'mailto:harishkanna068@gmail.com';
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    // Fallback: open Gmail compose in new tab after a short delay
+    const fallbackTimer = setTimeout(() => {
+      window.open(
+        'https://mail.google.com/mail/?view=cm&to=harishkanna068@gmail.com',
+        '_blank'
+      );
+    }, 1500);
+    // If page loses focus, mailto worked — cancel fallback
+    const onBlur = () => {
+      clearTimeout(fallbackTimer);
+      window.removeEventListener('blur', onBlur);
+    };
+    window.addEventListener('blur', onBlur);
+    setTimeout(() => {
+      document.body.removeChild(link);
+      window.removeEventListener('blur', onBlur);
+    }, 3000);
   };
 
   useEffect(() => {
