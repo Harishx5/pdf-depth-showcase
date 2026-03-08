@@ -20,19 +20,28 @@ const Projects: React.FC = () => {
         {data.projects.map((project, i) => (
           <ScrollAnimation key={i} delay={0.1 + i * 0.08} direction={i % 2 === 0 ? 'left' : 'right'}>
             <div className={`glass rounded-2xl p-8 group transition-all duration-500 hover:glow-border hover:-translate-y-1 ${project.highlight ? 'ring-1 ring-primary/10' : ''}`}>
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">{project.name}</h3>
-                  {project.highlight && <span className="text-[10px] uppercase tracking-widest text-primary/70 font-semibold">Top Project</span>}
+              <div className="relative">
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">{project.name}</h3>
+                    {project.highlight && <span className="text-[10px] uppercase tracking-widest text-primary/70 font-semibold">Top Project</span>}
+                  </div>
                 </div>
+                <p className="text-muted-foreground text-sm leading-relaxed mb-6">{project.desc}</p>
+                <div className="flex flex-wrap gap-2 mb-6">
+                  {project.tech.map(t => (
+                    <span key={t} className="text-xs px-3 py-1 rounded-full border border-primary/20 text-primary/80 bg-primary/5">{t}</span>
+                  ))}
+                </div>
+                {project.screenshot && (
+                  <img
+                    src={project.screenshot}
+                    alt={`${project.name} screenshot`}
+                    className="absolute inset-0 w-full h-full object-cover rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-10"
+                  />
+                )}
               </div>
-              <p className="text-muted-foreground text-sm leading-relaxed mb-6">{project.desc}</p>
-              <div className="flex flex-wrap gap-2 mb-6">
-                {project.tech.map(t => (
-                  <span key={t} className="text-xs px-3 py-1 rounded-full border border-primary/20 text-primary/80 bg-primary/5">{t}</span>
-                ))}
-              </div>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 relative z-20">
                 <a href={project.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-sm font-medium text-foreground hover:text-primary transition-colors">
                   <ExternalLink className="w-4 h-4" /> Live Demo
                 </a>

@@ -194,12 +194,12 @@ export const projectsDefaults = {
   title_prefix: 'Featured ',
   title_highlight: 'Work',
   projects: [
-    { name: 'InvexAI', desc: 'AI-powered inventory management system for SMEs with Gemini-driven demand forecasting, sales analysis, and real-time stock monitoring.', tech: ['React', 'TypeScript', 'TailwindCSS', 'Supabase', 'Gemini'], link: 'https://invexai.netlify.app', github: '#', highlight: true },
-    { name: 'SkillSwap', desc: 'Peer-to-peer skill exchange platform with AI-powered matching system, real-time chat, and community ratings for collaborative learning.', tech: ['React', 'TailwindCSS', 'Supabase', 'Firebase'], link: 'https://skillswappro.netlify.app', github: '#', highlight: true },
-    { name: 'SAP HR ERP', desc: 'Enterprise HR management system digitizing employee data, attendance tracking, leave management, and payroll integration.', tech: ['React', 'TypeScript', 'TailwindCSS', 'Supabase'], link: 'https://saphr.netlify.app', github: '#', highlight: true },
-    { name: 'Billing Software', desc: 'Custom billing system for mechanic shops with automated invoicing, real-time calculations, and mobile-friendly interface.', tech: ['React', 'TailwindCSS', 'Gemini', 'Supabase'], link: 'https://om-muruga-billing.netlify.app', github: '#', highlight: false },
-    { name: 'Hoops Hub', desc: 'Online basketball store with product catalog, customer reviews, and secure checkout built with modern web technologies.', tech: ['React', 'TailwindCSS', 'TypeScript'], link: 'https://deluxe-gumption-e4e2c7.netlify.app', github: '#', highlight: false },
-    { name: 'HELLA AI', desc: 'Advanced AI-powered chatbot leveraging Gemini for intelligent, human-like conversations across research, coding, and business strategies.', tech: ['React', 'TailwindCSS', 'Gemini', 'TypeScript'], link: 'https://hellalogin.netlify.app', github: '#', highlight: false },
+    { name: 'InvexAI', desc: 'AI-powered inventory management system for SMEs with Gemini-driven demand forecasting, sales analysis, and real-time stock monitoring.', tech: ['React', 'TypeScript', 'TailwindCSS', 'Supabase', 'Gemini'], link: 'https://invexai.netlify.app', github: '#', highlight: true, screenshot: '' },
+    { name: 'SkillSwap', desc: 'Peer-to-peer skill exchange platform with AI-powered matching system, real-time chat, and community ratings for collaborative learning.', tech: ['React', 'TailwindCSS', 'Supabase', 'Firebase'], link: 'https://skillswappro.netlify.app', github: '#', highlight: true, screenshot: '' },
+    { name: 'SAP HR ERP', desc: 'Enterprise HR management system digitizing employee data, attendance tracking, leave management, and payroll integration.', tech: ['React', 'TypeScript', 'TailwindCSS', 'Supabase'], link: 'https://saphr.netlify.app', github: '#', highlight: true, screenshot: '' },
+    { name: 'Billing Software', desc: 'Custom billing system for mechanic shops with automated invoicing, real-time calculations, and mobile-friendly interface.', tech: ['React', 'TailwindCSS', 'Gemini', 'Supabase'], link: 'https://om-muruga-billing.netlify.app', github: '#', highlight: false, screenshot: '' },
+    { name: 'Hoops Hub', desc: 'Online basketball store with product catalog, customer reviews, and secure checkout built with modern web technologies.', tech: ['React', 'TailwindCSS', 'TypeScript'], link: 'https://deluxe-gumption-e4e2c7.netlify.app', github: '#', highlight: false, screenshot: '' },
+    { name: 'HELLA AI', desc: 'Advanced AI-powered chatbot leveraging Gemini for intelligent, human-like conversations across research, coding, and business strategies.', tech: ['React', 'TailwindCSS', 'Gemini', 'TypeScript'], link: 'https://hellalogin.netlify.app', github: '#', highlight: false, screenshot: '' },
   ],
 };
 

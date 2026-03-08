@@ -380,6 +380,7 @@ function ProjectsEditor({ data, setData }: { data: any; setData: (d: any) => voi
               <div><Label>GitHub URL</Label><Input value={p.github} onChange={e => updateProject(i, 'github', e.target.value)} /></div>
             </div>
             <div><Label>Tech (comma separated)</Label><Input value={p.tech.join(', ')} onChange={e => updateProject(i, 'tech', e.target.value.split(',').map((t: string) => t.trim()).filter(Boolean))} /></div>
+            <div><Label>Screenshot URL</Label><Input value={p.screenshot || ''} onChange={e => updateProject(i, 'screenshot', e.target.value)} placeholder="https://example.com/screenshot.png" /></div>
             <div className="flex items-center gap-2">
               <Switch checked={p.highlight} onCheckedChange={v => updateProject(i, 'highlight', v)} />
               <Label>Highlight / Top Project</Label>
@@ -387,7 +388,7 @@ function ProjectsEditor({ data, setData }: { data: any; setData: (d: any) => voi
           </CardContent>
         </Card>
       ))}
-      <Button variant="outline" size="sm" onClick={() => setData({ ...data, projects: [...data.projects, { name: '', desc: '', tech: [], link: '', github: '', highlight: false }] })}><Plus className="w-4 h-4 mr-1" /> Add Project</Button>
+      <Button variant="outline" size="sm" onClick={() => setData({ ...data, projects: [...data.projects, { name: '', desc: '', tech: [], link: '', github: '', highlight: false, screenshot: '' }] })}><Plus className="w-4 h-4 mr-1" /> Add Project</Button>
     </div>
   );
 }
