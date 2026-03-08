@@ -8,11 +8,15 @@ const skillCategories = [
   },
   {
     title: 'Backend & Tools',
-    skills: ['Firebase', 'Supabase', 'Git', 'Netlify', 'Replit', 'API Integration'],
+    skills: ['Supabase', 'Firebase', 'API Integration', 'Git', 'Netlify', 'Replit'],
   },
   {
-    title: 'AI & Prompt Engineering',
-    skills: ['Generative AI', 'GPT-4', 'Gemini', 'Prompt Design', 'LLM Fine-tuning', 'AI Automation'],
+    title: 'AI / ML & Agentic Systems',
+    skills: ['Generative AI', 'Agentic AI', 'Machine Learning Applications', 'Prompt Engineering', 'LLM Workflows', 'GPT-4', 'Gemini', 'AI Automation'],
+  },
+  {
+    title: 'Development Approach',
+    skills: ['Rapid Prototyping', 'No-Code/Low-Code Development', 'AI-Assisted Development', 'System Integration'],
   },
 ];
 
