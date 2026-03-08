@@ -7,10 +7,12 @@ import Skills from '@/components/Skills';
 import Education from '@/components/Education';
 import Certifications from '@/components/Certifications';
 import Contact from '@/components/Contact';
+import LoadingScreen from '@/components/LoadingScreen';
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
+      <LoadingScreen />
       <Navbar />
       <Hero />
       <About />
