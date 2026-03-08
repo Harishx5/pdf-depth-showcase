@@ -58,6 +58,7 @@ export const aiProjectsDefaults = {
       tech: ['Python', 'Pandas', 'Scikit-learn', 'Flask', 'MySQL'],
       liveUrl: '#',
       githubUrl: '#',
+      screenshot: '',
     },
     {
       title: 'AI-Powered Skill Swap Platform',
@@ -65,6 +66,7 @@ export const aiProjectsDefaults = {
       tech: ['React', 'TypeScript', 'Supabase', 'GPT-4', 'TailwindCSS'],
       liveUrl: '#',
       githubUrl: '#',
+      screenshot: '',
     },
     {
       title: 'HELLA AI – Intelligent Chatbot',
@@ -72,12 +74,14 @@ export const aiProjectsDefaults = {
       tech: ['Python', 'LangChain', 'GPT-4', 'FastAPI', 'React'],
       liveUrl: '#',
       githubUrl: '#',
+      screenshot: '',
     },
     {
       title: 'Intrusion Detection System (IDS)',
       description: 'A machine learning-based network intrusion detection system that classifies network traffic patterns to identify potential security threats.',
       tech: ['Python', 'Scikit-learn', 'TensorFlow', 'Pandas', 'NetworkX'],
       githubUrl: '#',
+      screenshot: '',
     },
   ],
 };
