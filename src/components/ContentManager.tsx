@@ -20,7 +20,7 @@ import {
   experienceDefaults, projectsDefaults, educationDefaults, certificationsDefaults, contactDefaults,
 } from '@/data/defaults';
 
-const SECTIONS = [
+const BUILT_IN_SECTIONS = [
   { key: 'hero', label: 'Hero' },
   { key: 'about', label: 'About' },
   { key: 'ai_capabilities', label: 'AI Capabilities' },
@@ -33,7 +33,7 @@ const SECTIONS = [
   { key: 'education', label: 'Education' },
   { key: 'certifications', label: 'Certifications' },
   { key: 'contact', label: 'Contact' },
-] as const;
+];
 
 const DEFAULTS: Record<string, any> = {
   hero: heroDefaults, about: aboutDefaults, ai_capabilities: aiCapabilitiesDefaults,
