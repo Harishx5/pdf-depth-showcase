@@ -7,7 +7,7 @@ const certs = [
   { title: 'AI Tools Mastery Certification', issuers: ['Microsoft', 'IBM', 'AIGENXT'] },
   { title: 'AI Prompt Engineering', issuers: ['Microsoft', 'IBM', 'AWS', 'Infosys'] },
   { title: 'ChatGPT on Python', issuers: ['Simplilearn'] },
-  { title: 'Agentic AI by Claude', issuers: ['Anthropic (Open Claw)'] },
+  { title: 'Agentic AI', issuers: ['Anthropic (Open Claw)'] },
   { title: 'Claude Code in Action', issuers: ['Anthropic'] },
 ];
 
