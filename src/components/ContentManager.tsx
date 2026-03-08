@@ -388,7 +388,7 @@ function ProjectsEditor({ data, setData }: { data: any; setData: (d: any) => voi
           </CardContent>
         </Card>
       ))}
-      <Button variant="outline" size="sm" onClick={() => setData({ ...data, projects: [...data.projects, { name: '', desc: '', tech: [], link: '', github: '', highlight: false }] })}><Plus className="w-4 h-4 mr-1" /> Add Project</Button>
+      <Button variant="outline" size="sm" onClick={() => setData({ ...data, projects: [...data.projects, { name: '', desc: '', tech: [], link: '', github: '', highlight: false, screenshot: '' }] })}><Plus className="w-4 h-4 mr-1" /> Add Project</Button>
     </div>
   );
 }
