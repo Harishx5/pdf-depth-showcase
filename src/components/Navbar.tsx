@@ -12,18 +12,26 @@ const navItems = [
 
 const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
+  const [visible, setVisible] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', handleScroll);
+    const handleScroll = () => {
+      const currentY = window.scrollY;
+      setScrolled(currentY > 50);
+      setVisible(currentY < lastScrollY || currentY < 50);
+      setLastScrollY(currentY);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [lastScrollY]);
 
   return (
     <nav className={cn(
       'fixed top-0 left-0 right-0 z-50 transition-all duration-500',
-      scrolled ? 'glass py-3' : 'py-5'
+      scrolled ? 'glass py-3' : 'py-5',
+      visible ? 'translate-y-0' : '-translate-y-full'
     )}>
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         <ThemeToggle />
