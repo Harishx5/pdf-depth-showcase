@@ -49,8 +49,8 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <Card className="w-full max-w-md border-border/50 shadow-xl">
+    <LampContainer>
+      <Card className="w-full max-w-md border-border/50 shadow-xl bg-slate-900/80 backdrop-blur-md">
         <CardHeader className="text-center space-y-2">
           <div className="mx-auto w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mb-2">
             <Lock className="w-7 h-7 text-primary" />
