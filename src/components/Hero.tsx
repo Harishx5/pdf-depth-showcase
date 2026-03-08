@@ -1,6 +1,6 @@
 import React from 'react';
 import Interactive3DScene from './Interactive3DScene';
-import { Mail, Github, MapPin, ArrowDown } from 'lucide-react';
+import { Mail, Github, MapPin, ArrowDown, Download } from 'lucide-react';
 
 const Hero: React.FC = () => {
   return (
