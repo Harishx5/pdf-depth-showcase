@@ -533,8 +533,12 @@ const ContentManager: React.FC = () => {
   const { toast } = useToast();
   const [sectionData, setSectionData] = useState<Record<string, any>>({});
   const [customSections, setCustomSections] = useState<{ key: string; label: string }[]>([]);
+  const [sectionOrder, setSectionOrder] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState<string | null>(null);
+  const dragItem = useRef<number | null>(null);
+  const dragOverItem = useRef<number | null>(null);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchAll = async () => {
@@ -542,24 +546,75 @@ const ContentManager: React.FC = () => {
       if (error) { toast({ title: 'Error loading content', description: error.message, variant: 'destructive' }); setLoading(false); return; }
       const map: Record<string, any> = {};
       const customs: { key: string; label: string }[] = [];
+      const customKeys: string[] = [];
       BUILT_IN_SECTIONS.forEach(s => {
         const found = data?.find(d => d.section_key === s.key);
         map[s.key] = found ? { ...DEFAULTS[s.key], ...(found.content as any) } : { ...DEFAULTS[s.key] };
       });
-      // Load custom sections
       data?.forEach(d => {
         if (d.section_key.startsWith('custom_')) {
           const content = d.content as any;
           map[d.section_key] = { ...CUSTOM_DEFAULT, ...content };
           customs.push({ key: d.section_key, label: content?.section_label || d.section_key });
+          customKeys.push(d.section_key);
         }
       });
+      // Load saved order
+      const orderRow = data?.find(d => d.section_key === 'section_order');
+      const savedOrder = orderRow ? (orderRow.content as any)?.order as string[] | undefined : undefined;
+      if (savedOrder && Array.isArray(savedOrder)) {
+        // Merge: keep saved order, append any new sections not in saved order
+        const allKeys = new Set([...DEFAULT_SECTION_ORDER, ...customKeys]);
+        const merged = savedOrder.filter(k => allKeys.has(k));
+        allKeys.forEach(k => { if (!merged.includes(k)) merged.push(k); });
+        setSectionOrder(merged);
+      } else {
+        setSectionOrder([...DEFAULT_SECTION_ORDER, ...customKeys]);
+      }
       setCustomSections(customs);
       setSectionData(map);
       setLoading(false);
     };
     fetchAll();
   }, []);
+
+  const saveOrder = useCallback(async (newOrder: string[]) => {
+    try {
+      await upsertSiteContent('section_order', { order: newOrder });
+    } catch (e: any) {
+      toast({ title: 'Error saving order', description: e.message, variant: 'destructive' });
+    }
+  }, [toast]);
+
+  const handleDragStart = (index: number) => {
+    dragItem.current = index;
+  };
+
+  const handleDragOver = (e: React.DragEvent, index: number) => {
+    e.preventDefault();
+    dragOverItem.current = index;
+    setDragOverIndex(index);
+  };
+
+  const handleDrop = () => {
+    if (dragItem.current === null || dragOverItem.current === null || dragItem.current === dragOverItem.current) {
+      setDragOverIndex(null);
+      return;
+    }
+    const newOrder = [...sectionOrder];
+    const [removed] = newOrder.splice(dragItem.current, 1);
+    newOrder.splice(dragOverItem.current, 0, removed);
+    setSectionOrder(newOrder);
+    saveOrder(newOrder);
+    dragItem.current = null;
+    dragOverItem.current = null;
+    setDragOverIndex(null);
+    toast({ title: 'Order updated', description: 'Section order saved.' });
+  };
+
+  const handleDragEnd = () => {
+    setDragOverIndex(null);
+  };
 
   const handleSave = async (sectionKey: string) => {
     setSaving(sectionKey);
