@@ -17,7 +17,7 @@ interface CustomSectionData {
   items: CustomItem[];
 }
 
-const CustomSections: React.FC = () => {
+const CustomSections: React.FC<{ order: string[] }> = ({ order }) => {
   const { data: sections } = useQuery({
     queryKey: ['custom-sections'],
     queryFn: async () => {
