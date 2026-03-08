@@ -78,11 +78,9 @@ const Contact: React.FC = () => {
             <div className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-3 flex gap-3 ${isClosing ? 'animate-exit' : 'animate-enter'}`}>
               <a
                 href="mailto:harishkanna068@gmail.com"
-                target="_blank"
-                rel="noopener noreferrer"
                 onClick={(e) => {
                   e.preventDefault();
-                  window.open('mailto:harishkanna068@gmail.com', '_blank');
+                  window.location.href = 'mailto:harishkanna068@gmail.com';
                 }}
                 className="flex items-center gap-2 px-5 py-3 rounded-xl glass hover:glow-border transition-all duration-300 text-foreground text-sm font-medium whitespace-nowrap"
               >
