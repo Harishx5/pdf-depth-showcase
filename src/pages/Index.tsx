@@ -5,6 +5,9 @@ import Experience from '@/components/Experience';
 import Projects from '@/components/Projects';
 import Skills from '@/components/Skills';
 import AICapabilities from '@/components/AICapabilities';
+import AIProjects from '@/components/AIProjects';
+import PromptShowcase from '@/components/PromptShowcase';
+import CurrentlyExploring from '@/components/CurrentlyExploring';
 import Education from '@/components/Education';
 import Certifications from '@/components/Certifications';
 import Contact from '@/components/Contact';
@@ -17,10 +20,13 @@ const Index = () => {
       <Navbar />
       <Hero />
       <About />
+      <AICapabilities />
+      <AIProjects />
+      <Skills />
+      <PromptShowcase />
+      <CurrentlyExploring />
       <Experience />
       <Projects />
-      <Skills />
-      <AICapabilities />
       <Education />
       <Certifications />
       <Contact />
