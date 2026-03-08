@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
-import { useTheme } from 'next-themes';
-import { Sun, Moon } from 'lucide-react';
+import ThemeToggle from './ThemeToggle';
 
 const navItems = [
   { label: 'About', href: '#about' },
