@@ -644,6 +644,11 @@ const ContentManager: React.FC = () => {
     const newData = { ...CUSTOM_DEFAULT };
     setSectionData(prev => ({ ...prev, [key]: newData }));
     setCustomSections(prev => [...prev, { key, label: 'New Section' }]);
+    setSectionOrder(prev => {
+      const newOrder = [...prev, key];
+      saveOrder(newOrder);
+      return newOrder;
+    });
   };
 
   const handleDeleteCustomSection = async (sectionKey: string) => {
