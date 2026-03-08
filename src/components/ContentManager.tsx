@@ -467,6 +467,39 @@ function ContactEditor({ data, setData }: { data: any; setData: (d: any) => void
   );
 }
 
+function CustomSectionEditor({ data, setData }: { data: any; setData: (d: any) => void }) {
+  const updateItem = (i: number, field: string, value: string) => {
+    const items = [...(data.items || [])];
+    items[i] = { ...items[i], [field]: value };
+    setData({ ...data, items });
+  };
+  return (
+    <div className="space-y-4">
+      <div><Label>Section Label</Label><Input value={data.section_label || ''} onChange={e => setData({ ...data, section_label: e.target.value })} /></div>
+      <div className="grid grid-cols-2 gap-2">
+        <div><Label>Title Prefix</Label><Input value={data.title_prefix || ''} onChange={e => setData({ ...data, title_prefix: e.target.value })} /></div>
+        <div><Label>Title Highlight</Label><Input value={data.title_highlight || ''} onChange={e => setData({ ...data, title_highlight: e.target.value })} /></div>
+      </div>
+      <Label className="text-base font-semibold">Items</Label>
+      {(data.items || []).map((item: any, i: number) => (
+        <Card key={i}>
+          <CardContent className="pt-4 space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2"><Label>Icon</Label><IconPicker value={item.icon || 'Star'} onChange={v => updateItem(i, 'icon', v)} /></div>
+              <Button variant="ghost" size="icon" onClick={() => setData({ ...data, items: data.items.filter((_: any, j: number) => j !== i) })}><Trash2 className="w-4 h-4" /></Button>
+            </div>
+            <div><Label>Title</Label><Input value={item.title || ''} onChange={e => updateItem(i, 'title', e.target.value)} /></div>
+            <div><Label>Description</Label><Textarea value={item.description || ''} onChange={e => updateItem(i, 'description', e.target.value)} /></div>
+          </CardContent>
+        </Card>
+      ))}
+      <Button variant="outline" size="sm" onClick={() => setData({ ...data, items: [...(data.items || []), { icon: 'Star', title: '', description: '' }] })}>
+        <Plus className="w-4 h-4 mr-1" /> Add Item
+      </Button>
+    </div>
+  );
+}
+
 const EDITORS: Record<string, React.FC<{ data: any; setData: (d: any) => void }>> = {
   hero: HeroEditor,
   about: AboutEditor,
@@ -482,9 +515,18 @@ const EDITORS: Record<string, React.FC<{ data: any; setData: (d: any) => void }>
   contact: ContactEditor,
 };
 
+const CUSTOM_DEFAULT = {
+  section_label: 'New Section',
+  title_prefix: '',
+  title_highlight: 'New Section',
+  type: 'custom',
+  items: [{ icon: 'Star', title: 'Item Title', description: 'Description text' }],
+};
+
 const ContentManager: React.FC = () => {
   const { toast } = useToast();
   const [sectionData, setSectionData] = useState<Record<string, any>>({});
+  const [customSections, setCustomSections] = useState<{ key: string; label: string }[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState<string | null>(null);
 
@@ -493,10 +535,20 @@ const ContentManager: React.FC = () => {
       const { data, error } = await supabase.from('site_content').select('section_key, content');
       if (error) { toast({ title: 'Error loading content', description: error.message, variant: 'destructive' }); setLoading(false); return; }
       const map: Record<string, any> = {};
-      SECTIONS.forEach(s => {
+      const customs: { key: string; label: string }[] = [];
+      BUILT_IN_SECTIONS.forEach(s => {
         const found = data?.find(d => d.section_key === s.key);
         map[s.key] = found ? { ...DEFAULTS[s.key], ...(found.content as any) } : { ...DEFAULTS[s.key] };
       });
+      // Load custom sections
+      data?.forEach(d => {
+        if (d.section_key.startsWith('custom_')) {
+          const content = d.content as any;
+          map[d.section_key] = { ...CUSTOM_DEFAULT, ...content };
+          customs.push({ key: d.section_key, label: content?.section_label || d.section_key });
+        }
+      });
+      setCustomSections(customs);
       setSectionData(map);
       setLoading(false);
     };
@@ -507,6 +559,10 @@ const ContentManager: React.FC = () => {
     setSaving(sectionKey);
     try {
       await upsertSiteContent(sectionKey, sectionData[sectionKey]);
+      // Update custom section label if it changed
+      if (sectionKey.startsWith('custom_')) {
+        setCustomSections(prev => prev.map(s => s.key === sectionKey ? { ...s, label: sectionData[sectionKey].section_label || sectionKey } : s));
+      }
       toast({ title: 'Saved!', description: `${sectionKey} content updated successfully.` });
     } catch (e: any) {
       toast({ title: 'Error saving', description: e.message, variant: 'destructive' });
@@ -515,22 +571,50 @@ const ContentManager: React.FC = () => {
   };
 
   const handleResetSection = (sectionKey: string) => {
-    setSectionData(prev => ({ ...prev, [sectionKey]: { ...DEFAULTS[sectionKey] } }));
+    if (sectionKey.startsWith('custom_')) {
+      setSectionData(prev => ({ ...prev, [sectionKey]: { ...CUSTOM_DEFAULT } }));
+    } else {
+      setSectionData(prev => ({ ...prev, [sectionKey]: { ...DEFAULTS[sectionKey] } }));
+    }
+  };
+
+  const handleAddCustomSection = () => {
+    const key = `custom_${Date.now()}`;
+    const newData = { ...CUSTOM_DEFAULT };
+    setSectionData(prev => ({ ...prev, [key]: newData }));
+    setCustomSections(prev => [...prev, { key, label: 'New Section' }]);
+  };
+
+  const handleDeleteCustomSection = async (sectionKey: string) => {
+    try {
+      await supabase.from('site_content').delete().eq('section_key', sectionKey);
+      setSectionData(prev => { const copy = { ...prev }; delete copy[sectionKey]; return copy; });
+      setCustomSections(prev => prev.filter(s => s.key !== sectionKey));
+      toast({ title: 'Deleted', description: 'Custom section removed.' });
+    } catch (e: any) {
+      toast({ title: 'Error deleting', description: e.message, variant: 'destructive' });
+    }
   };
 
   if (loading) return <div className="p-8 text-center text-muted-foreground">Loading content...</div>;
 
+  const allSections = [...BUILT_IN_SECTIONS, ...customSections];
+
   return (
     <div className="space-y-4">
       <Accordion type="single" collapsible className="space-y-2">
-        {SECTIONS.map(section => {
-          const Editor = EDITORS[section.key];
+        {allSections.map(section => {
+          const isCustom = section.key.startsWith('custom_');
+          const Editor = isCustom ? CustomSectionEditor : EDITORS[section.key];
           const data = sectionData[section.key];
           if (!Editor || !data) return null;
           return (
             <AccordionItem key={section.key} value={section.key} className="border rounded-lg px-4">
               <AccordionTrigger className="text-base font-semibold hover:no-underline">
-                {section.label}
+                <div className="flex items-center gap-2">
+                  {section.label}
+                  {isCustom && <Badge variant="secondary" className="text-xs">Custom</Badge>}
+                </div>
               </AccordionTrigger>
               <AccordionContent>
                 <div className="pb-4">
@@ -540,6 +624,11 @@ const ContentManager: React.FC = () => {
                       <Save className="w-4 h-4 mr-2" /> {saving === section.key ? 'Saving...' : 'Save'}
                     </Button>
                     <Button variant="outline" onClick={() => handleResetSection(section.key)}>Reset to Default</Button>
+                    {isCustom && (
+                      <Button variant="destructive" onClick={() => handleDeleteCustomSection(section.key)}>
+                        <Trash2 className="w-4 h-4 mr-2" /> Delete Section
+                      </Button>
+                    )}
                   </div>
                 </div>
               </AccordionContent>
@@ -547,6 +636,9 @@ const ContentManager: React.FC = () => {
           );
         })}
       </Accordion>
+      <Button onClick={handleAddCustomSection} className="w-full" variant="outline">
+        <Plus className="w-4 h-4 mr-2" /> Add New Section
+      </Button>
     </div>
   );
 };
