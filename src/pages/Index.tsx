@@ -19,8 +19,9 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <LoadingScreen />
-      <Navbar />
-      <Hero />
+      <Suspense fallback={<div className="min-h-screen bg-background" />}>
+        <Hero />
+      </Suspense>
       <About />
       <AICapabilities />
       <AIProjects />
