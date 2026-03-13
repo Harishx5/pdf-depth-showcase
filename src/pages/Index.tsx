@@ -12,16 +12,15 @@ import Education from '@/components/Education';
 import Certifications from '@/components/Certifications';
 import Contact from '@/components/Contact';
 import CustomSections from '@/components/CustomSections';
-import LoadingScreen from '@/components/LoadingScreen';
 import { useVisitorTracking } from '@/hooks/useVisitorTracking';
 import { useSiteContent } from '@/hooks/useSiteContent';
-import { DEFAULT_SECTION_ORDER } from '@/components/ContentManager';
+import { DEFAULT_SECTION_ORDER } from '@/data/defaults';
 
 const Hero = React.lazy(() => import('@/components/Hero'));
 
 const SECTION_COMPONENTS: Record<string, React.ReactNode> = {
   hero: (
-    <Suspense key="hero" fallback={<div className="min-h-screen bg-background" />}>
+    <Suspense key="hero" fallback={<div className="h-[50vh] bg-background" />}>
       <Hero />
     </Suspense>
   ),
@@ -45,10 +44,9 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <LoadingScreen />
       <Navbar />
       {order.map(key => {
-        if (key.startsWith('custom_')) return null; // rendered by CustomSections below
+        if (key.startsWith('custom_')) return null;
         return SECTION_COMPONENTS[key] || null;
       })}
       <CustomSections order={order} />

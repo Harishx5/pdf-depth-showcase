@@ -1,6 +1,5 @@
 import React from 'react';
-import Interactive3DScene from './Interactive3DScene';
-import { Mail, Github, MapPin, ArrowDown, Download } from 'lucide-react';
+import { Github, Mail, FileText, Linkedin } from 'lucide-react';
 import { useSiteContent } from '@/hooks/useSiteContent';
 import { heroDefaults } from '@/data/defaults';
 
@@ -8,63 +7,42 @@ const Hero: React.FC = () => {
   const { data } = useSiteContent('hero', heroDefaults);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      <Interactive3DScene />
-      
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background pointer-events-none" />
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent pointer-events-none" />
-
-      <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/20 bg-primary/5 text-primary text-sm mb-8">
-          <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-          {data.status_text}
-        </div>
-
-        <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-6" style={{ fontFamily: 'Space Grotesk' }}>
-          <span className="text-foreground">{data.name_prefix}</span>
-          <span className="text-gradient">{data.name_highlight}</span>
-        </h1>
-
-        <p className="text-xl md:text-2xl text-muted-foreground font-light mb-4 tracking-wide">
-          {data.subtitle}
-        </p>
-
-        <div className="flex flex-wrap items-center justify-center gap-2 mb-6">
-          {data.tags.map(tag => (
-            <span key={tag} className="px-3 py-1 text-xs font-medium rounded-full border border-primary/30 bg-primary/10 text-primary">
-              {tag}
-            </span>
-          ))}
-        </div>
-
-        <p className="text-base text-muted-foreground/70 max-w-2xl mx-auto mb-10 leading-relaxed">
-          {data.description}
-        </p>
-
-        <div className="flex items-center justify-center gap-6 mb-12 text-sm text-muted-foreground">
-          <span className="flex items-center gap-1.5"><MapPin className="w-4 h-4 text-primary" /> {data.location}</span>
-          <span className="flex items-center gap-1.5"><Mail className="w-4 h-4 text-primary" /> {data.email}</span>
-          <a href={data.github_url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-primary transition-colors">
-            <Github className="w-4 h-4 text-primary" /> GitHub
+    <section id="hero" className="pt-32 pb-16 md:pt-40 md:pb-24 px-5 sm:px-6 lg:px-8 max-w-3xl mx-auto">
+      <h1 className="text-3xl md:text-5xl font-semibold tracking-tight text-foreground mb-4">
+        {data.name}
+      </h1>
+      <p className="text-lg text-muted-foreground mb-4">
+        {data.subtitle}
+      </p>
+      <p className="text-base text-muted-foreground leading-relaxed mb-8 max-w-2xl">
+        {data.description}
+      </p>
+      <div className="flex items-center gap-5 text-sm">
+        {data.github_url && (
+          <a href={data.github_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors">
+            <Github className="w-4 h-4" />
+            GitHub
           </a>
-        </div>
-
-        <div className="flex items-center justify-center gap-4">
-          <a href="#projects" className="px-8 py-3 rounded-full bg-primary text-primary-foreground font-medium hover:shadow-lg hover:shadow-primary/25 transition-all duration-300 hover:-translate-y-0.5">
-            View Projects
+        )}
+        {data.linkedin_url && (
+          <a href={data.linkedin_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors">
+            <Linkedin className="w-4 h-4" />
+            LinkedIn
           </a>
-          <a href="#contact" className="px-8 py-3 rounded-full border border-border text-foreground hover:border-primary/50 hover:text-primary transition-all duration-300">
-            Contact Me
+        )}
+        {data.email && (
+          <a href={`mailto:${data.email}`} className="inline-flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors">
+            <Mail className="w-4 h-4" />
+            Email
           </a>
-          <a href="/resume.pdf" download className="px-8 py-3 rounded-full border border-primary/50 text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 flex items-center gap-2">
-            <Download className="w-4 h-4" /> Resume
+        )}
+        {data.resume_url && (
+          <a href={data.resume_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors">
+            <FileText className="w-4 h-4" />
+            Resume
           </a>
-        </div>
+        )}
       </div>
-
-      <a href="#about" className="absolute bottom-10 left-1/2 -translate-x-1/2 text-muted-foreground/50 animate-bounce">
-        <ArrowDown className="w-5 h-5" />
-      </a>
     </section>
   );
 };

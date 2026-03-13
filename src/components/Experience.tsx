@@ -1,50 +1,48 @@
 import React from 'react';
 import ScrollAnimation from './ScrollAnimation';
-import DynamicIcon from './DynamicIcon';
-import { CheckCircle2 } from 'lucide-react';
 import { useSiteContent } from '@/hooks/useSiteContent';
 import { experienceDefaults } from '@/data/defaults';
 
 const Experience: React.FC = () => {
   const { data } = useSiteContent('experience', experienceDefaults);
 
+  // Support both single-item legacy format and multi-item format
+  const items = (data as any).items || [{
+    role: (data as any).job_title,
+    company: (data as any).company,
+    period: (data as any).period,
+    location: (data as any).location,
+    achievements: (data as any).achievements,
+  }];
+
   return (
-    <section id="experience" className="section-padding max-w-6xl mx-auto">
+    <section id="experience" className="section-padding max-w-3xl mx-auto">
       <ScrollAnimation>
-        <p className="text-primary text-sm tracking-widest uppercase mb-3">{data.section_label}</p>
-        <h2 className="text-3xl md:text-5xl font-bold mb-16 tracking-tight" style={{ fontFamily: 'Space Grotesk' }}>
-          {data.title_prefix}<span className="text-gradient">{data.title_highlight}</span>
-        </h2>
+        <h2 className="text-2xl font-semibold text-foreground mb-8">Experience</h2>
       </ScrollAnimation>
 
-      <ScrollAnimation delay={0.1}>
-        <div className="glass rounded-2xl p-8 md:p-12 relative overflow-hidden group hover:glow-border transition-all duration-500">
-          <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary via-primary/50 to-transparent" />
-          <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-8">
-            <div>
-              <div className="flex items-center gap-3 mb-2">
-                <DynamicIcon name={data.icon} className="w-5 h-5 text-primary" />
-                <h3 className="text-xl font-bold text-foreground">{data.job_title}</h3>
+      <div className="space-y-8">
+        {items.map((item: any, i: number) => (
+          <ScrollAnimation key={i} delay={0.05 * i}>
+            <div className="border-l-2 border-border pl-5">
+              <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between mb-1">
+                <h3 className="text-base font-medium text-foreground">{item.role}</h3>
+                <span className="text-sm text-muted-foreground">{item.period}</span>
               </div>
-              <p className="text-primary font-medium text-lg">{data.company}</p>
+              <p className="text-sm text-muted-foreground mb-2">{item.company}{item.location ? ` · ${item.location}` : ''}</p>
+              {item.achievements?.length > 0 && (
+                <ul className="space-y-1">
+                  {item.achievements.map((a: string, j: number) => (
+                    <li key={j} className="text-sm text-muted-foreground leading-relaxed">
+                      — {a}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
-            <div className="mt-2 md:mt-0 text-right">
-              <p className="text-muted-foreground text-sm">{data.period}</p>
-              <p className="text-muted-foreground/60 text-sm">{data.location}</p>
-            </div>
-          </div>
-          <div className="grid md:grid-cols-2 gap-4">
-            {data.achievements.map((item, i) => (
-              <ScrollAnimation key={i} delay={0.2 + i * 0.05} direction="left">
-                <div className="flex items-start gap-3">
-                  <CheckCircle2 className="w-4 h-4 text-primary mt-1 shrink-0" />
-                  <p className="text-muted-foreground text-sm leading-relaxed">{item}</p>
-                </div>
-              </ScrollAnimation>
-            ))}
-          </div>
-        </div>
-      </ScrollAnimation>
+          </ScrollAnimation>
+        ))}
+      </div>
     </section>
   );
 };
