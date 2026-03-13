@@ -7,12 +7,12 @@ const Experience: React.FC = () => {
   const { data } = useSiteContent('experience', experienceDefaults);
 
   // Support both single-item legacy format and multi-item format
-  const items = data.items || [{
-    role: data.job_title,
-    company: data.company,
-    period: data.period,
-    location: data.location,
-    achievements: data.achievements,
+  const items = (data as any).items || [{
+    role: (data as any).job_title,
+    company: (data as any).company,
+    period: (data as any).period,
+    location: (data as any).location,
+    achievements: (data as any).achievements,
   }];
 
   return (
