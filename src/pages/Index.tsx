@@ -14,13 +14,13 @@ import Contact from '@/components/Contact';
 import CustomSections from '@/components/CustomSections';
 import { useVisitorTracking } from '@/hooks/useVisitorTracking';
 import { useSiteContent } from '@/hooks/useSiteContent';
-import { DEFAULT_SECTION_ORDER } from '@/components/ContentManager';
+import { DEFAULT_SECTION_ORDER } from '@/data/defaults';
 
 const Hero = React.lazy(() => import('@/components/Hero'));
 
 const SECTION_COMPONENTS: Record<string, React.ReactNode> = {
   hero: (
-    <Suspense key="hero" fallback={<div className="min-h-[50vh] bg-background" />}>
+    <Suspense key="hero" fallback={<div className="h-[50vh] bg-background" />}>
       <Hero />
     </Suspense>
   ),

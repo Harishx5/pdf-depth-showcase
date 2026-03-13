@@ -1,85 +1,68 @@
 import React, { useState, useEffect } from 'react';
-import { cn } from '@/lib/utils';
+import { Menu, X } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 
 const navItems = [
-  { label: 'About', href: '#about' },
-  { label: 'Experience', href: '#experience' },
-  { label: 'Projects', href: '#projects' },
-  { label: 'Skills', href: '#skills' },
-  { label: 'Resume', href: '/resume.pdf', download: true },
-  { label: 'Contact', href: '#contact' },
+  { label: 'About', id: 'about' },
+  { label: 'Experience', id: 'experience' },
+  { label: 'Projects', id: 'projects' },
+  { label: 'Skills', id: 'skills' },
+  { label: 'Contact', id: 'contact' },
 ];
 
 const Navbar: React.FC = () => {
+  const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [visible, setVisible] = useState(true);
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [lastScrollY, setLastScrollY] = useState(0);
 
   useEffect(() => {
-    const handleScroll = () => {
-      const currentY = window.scrollY;
-      setScrolled(currentY > 50);
-      setVisible(currentY < lastScrollY || currentY < 50);
-      setLastScrollY(currentY);
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY]);
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  const handleClick = (id: string) => {
+    setIsOpen(false);
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
-    <nav className={cn(
-      'fixed top-0 left-0 right-0 z-50 transition-all duration-500',
-      scrolled ? 'glass py-3' : 'py-5',
-      visible ? 'translate-y-0' : '-translate-y-full'
-    )}>
-      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-        <ThemeToggle />
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 ${scrolled ? 'bg-background/95 backdrop-blur-sm border-b border-border' : ''}`}>
+      <div className="max-w-3xl mx-auto px-5 sm:px-6 lg:px-8 flex items-center justify-between h-14">
+        <button onClick={() => handleClick('hero')} className="text-sm font-medium text-foreground">
+          SK Harish Kanna
+        </button>
 
-        {/* Desktop */}
-        <div className="hidden md:flex items-center gap-8">
-          {navItems.map(item => (
-            <a
-              key={item.href}
-              href={item.href}
-              {...(item.download ? { download: true, target: '_blank' } : {})}
-              className="text-sm text-muted-foreground hover:text-primary transition-colors duration-300 tracking-wide uppercase"
+        <div className="hidden md:flex items-center gap-6">
+          {navItems.map((item) => (
+            <button
+              key={item.id}
+              onClick={() => handleClick(item.id)}
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
               {item.label}
-            </a>
+            </button>
           ))}
-          <a
-            href="#contact"
-            className="text-sm px-5 py-2 rounded-full border border-primary/50 text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300"
-          >
-            Let's Talk
-          </a>
+          <ThemeToggle />
         </div>
 
-        {/* Mobile toggle */}
-        <button
-          className="md:hidden flex flex-col gap-1.5 p-2"
-          onClick={() => setMobileOpen(!mobileOpen)}
-        >
-          <span className={cn('w-6 h-0.5 bg-foreground transition-all', mobileOpen && 'rotate-45 translate-y-2')} />
-          <span className={cn('w-6 h-0.5 bg-foreground transition-all', mobileOpen && 'opacity-0')} />
-          <span className={cn('w-6 h-0.5 bg-foreground transition-all', mobileOpen && '-rotate-45 -translate-y-2')} />
-        </button>
+        <div className="md:hidden flex items-center gap-3">
+          <ThemeToggle />
+          <button onClick={() => setIsOpen(!isOpen)} className="text-foreground">
+            {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+        </div>
       </div>
 
-      {/* Mobile menu */}
-      {mobileOpen && (
-        <div className="md:hidden glass mt-2 mx-4 rounded-xl p-6 flex flex-col gap-4">
-          {navItems.map(item => (
-            <a
-              key={item.href}
-              href={item.href}
-              onClick={() => setMobileOpen(false)}
-              className="text-sm text-muted-foreground hover:text-primary transition-colors uppercase tracking-wide"
+      {isOpen && (
+        <div className="md:hidden bg-background border-b border-border px-5 py-3 space-y-2">
+          {navItems.map((item) => (
+            <button
+              key={item.id}
+              onClick={() => handleClick(item.id)}
+              className="block w-full text-left text-sm text-muted-foreground hover:text-foreground py-1.5"
             >
               {item.label}
-            </a>
+            </button>
           ))}
         </div>
       )}
