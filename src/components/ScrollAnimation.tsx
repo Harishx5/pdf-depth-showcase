@@ -13,10 +13,10 @@ const ScrollAnimation: React.FC<ScrollAnimationProps> = ({ children, className, 
   const { ref, isVisible } = useScrollAnimation(0.1);
 
   const transforms = {
-    up: 'translateY(16px)',
-    left: 'translateX(-16px)',
-    right: 'translateX(16px)',
-    scale: 'scale(0.97)',
+    up: 'translate3d(0, 60px, 0)',
+    left: 'translate3d(-60px, 0, 0)',
+    right: 'translate3d(60px, 0, 0)',
+    scale: 'scale(0.85)',
   };
 
   return (
@@ -25,8 +25,9 @@ const ScrollAnimation: React.FC<ScrollAnimationProps> = ({ children, className, 
       className={cn(className)}
       style={{
         opacity: isVisible ? 1 : 0,
-        transform: isVisible ? 'none' : transforms[direction],
-        transition: `opacity 0.5s ease ${delay}s, transform 0.5s ease ${delay}s`,
+        transform: isVisible ? 'translate3d(0,0,0) scale(1)' : transforms[direction],
+        transition: `opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${delay}s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${delay}s`,
+        willChange: 'opacity, transform',
       }}
     >
       {children}
